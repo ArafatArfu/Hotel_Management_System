@@ -1,0 +1,5 @@
+{
+  "name": "Al Madina Restaurant Management",
+  "description": "A comprehensive frontend application for managing hotel/restaurant operations including menu management, billing, and receipt generation. Built with React and Tailwind CSS for a modern, responsive user experience.",
+  "requestFramePermissions": []
+}
