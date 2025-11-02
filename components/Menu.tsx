@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { MenuItem } from '../types';
 import { Category, Status } from '../types';
 import MenuItemModal from './MenuItemModal';
+import { useLanguage } from '../context/LanguageContext';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -12,6 +13,7 @@ interface MenuItemCardProps {
 }
 
 const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChange, onEdit, onDelete }) => {
+  const { t, language } = useLanguage();
   const getPlaceholderUrl = () => {
     return `https://via.placeholder.com/400x240.png/5D4037/FFFFFF?text=${encodeURIComponent(item.name)}`;
   };
@@ -27,6 +29,10 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
       onImageChange(item.id, e.target.files[0]);
     }
   };
+  
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
+  }
 
   return (
     <div className="bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col group">
@@ -40,7 +46,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
         {isAdmin && (
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex justify-center items-center">
                 <label htmlFor={`upload-${item.id}`} className="cursor-pointer bg-white text-brand-primary px-3 py-1 rounded-md text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Upload Image
+                    {t('menu.uploadImage')}
                 </label>
                 <input 
                     type="file" 
@@ -58,16 +64,16 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
           <span className={`text-sm font-semibold px-2 py-1 rounded-full whitespace-nowrap ${
             item.status === Status.AVAILABLE ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
           }`}>
-            {item.status}
+            {t(`enums.status.${item.status}`)}
           </span>
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{item.category}</p>
         <div className="mt-auto pt-2 flex justify-between items-center">
-          <p className="text-xl font-bold text-brand-secondary dark:text-gray-300">৳{item.price.toFixed(2)}</p>
+          <p className="text-xl font-bold text-brand-secondary dark:text-gray-300">{formatCurrency(item.price)}</p>
           {isAdmin && (
             <div className="space-x-2">
-                <button onClick={() => onEdit(item)} className="text-xs text-blue-600 hover:underline">Edit</button>
-                <button onClick={() => onDelete(item.id)} className="text-xs text-red-600 hover:underline">Delete</button>
+                <button onClick={() => onEdit(item)} className="text-xs text-blue-600 hover:underline">{t('common.edit')}</button>
+                <button onClick={() => onDelete(item.id)} className="text-xs text-red-600 hover:underline">{t('common.delete')}</button>
             </div>
           )}
         </div>
@@ -86,6 +92,7 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, onUpdate, onDelete }) => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,17 +129,17 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">Our Menu</h2>
+        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('menu.title')}</h2>
         {isAdmin && (
             <button onClick={handleAddNew} className="bg-brand-primary text-white px-4 py-2 rounded-md shadow hover:bg-opacity-90">
-                Add New Item
+                {t('menu.addNewItem')}
             </button>
         )}
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <input
           type="text"
-          placeholder="Search for a dish..."
+          placeholder={t('menu.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-grow p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
@@ -149,7 +156,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
                 : 'bg-brand-surface dark:bg-brand-surface-dark dark:text-gray-200 hover:bg-brand-secondary hover:text-white'
             }`}
           >
-            {category}
+            {category === 'All' ? t('menu.all') : category}
           </button>
         ))}
       </div>
@@ -157,7 +164,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
         {filteredItems.length > 0 ? (
           filteredItems.map(item => <MenuItemCard key={item.id} item={item} isAdmin={isAdmin} onImageChange={onImageChange} onEdit={handleEdit} onDelete={onDelete} />)
         ) : (
-          <p className="col-span-full text-center text-gray-500 dark:text-gray-400">No menu items match your criteria.</p>
+          <p className="col-span-full text-center text-gray-500 dark:text-gray-400">{t('menu.noItems')}</p>
         )}
       </div>
       {isModalOpen && <MenuItemModal item={editingItem} onClose={() => setIsModalOpen(false)} onSave={handleSave} />}

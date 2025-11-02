@@ -1,0 +1,8 @@
+// SVGs for flags to avoid external requests
+export const flags: { [key: string]: string } = {
+  en: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="15"><clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="b"><path d="M30 15h30v15H30zm0-15h30v15H30zM0 15h30v15H0zM0 0h30v15H0z"/></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg>`,
+  ar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="15"><path fill="#006c35" d="M0 0h60v30H0z"/><text x="30" y="21" font-family="sans-serif" font-size="7" fill="#fff" text-anchor="middle" transform="translate(0, -2)">لَا إِلٰهَ إِلَّا الله مُحَمَّدٌ رَسُولُ الله</text><path d="M10 22h40" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  es: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="15"><path d="M0 0h60v30H0z" fill="#c60b1e"/><path d="M0 7.5h60v15H0z" fill="#ffc400"/></svg>`,
+  fr: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="15"><path d="M0 0h20v30H0z" fill="#002654"/><path d="M20 0h20v30H20z" fill="#fff"/><path d="M40 0h20v30H40z" fill="#ed2939"/></svg>`,
+  bn: `<svg xmlns="http://www.w.org/2000/svg" viewBox="0 0 60 30" width="24" height="15"><path d="M0 0h60v30H0z" fill="#006a4e"/><circle cx="27" cy="15" r="9" fill="#f42a41"/></svg>`,
+};

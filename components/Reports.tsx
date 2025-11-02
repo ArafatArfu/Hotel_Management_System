@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import type { Order, Employee, Expense } from '../types';
 import { EmployeeStatus, SalaryType } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ReportsProps {
   orders: Order[];
@@ -23,12 +24,17 @@ const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ ti
 );
 
 const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
+  const { t, language } = useLanguage();
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
   });
 
   const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
+  
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
+  }
 
   const monthlyData = useMemo(() => {
     const [year, month] = selectedMonth.split('-').map(Number);
@@ -74,7 +80,7 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">Monthly Profit Report</h2>
+        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('reports.title')}</h2>
         <input
           type="month"
           value={selectedMonth}
@@ -84,26 +90,26 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard title="Total Revenue" value={`৳${monthlyData.revenue.toFixed(2)}`} icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-        <StatCard title="Total Expenses" value={`৳${monthlyData.totalExpenses.toFixed(2)}`} icon="M9 14l6-6m-5.5.5h.01" />
-        <StatCard title="Net Profit" value={`৳${monthlyData.netProfit.toFixed(2)}`} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        <StatCard title={t('reports.totalRevenue')} value={formatCurrency(monthlyData.revenue)} icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+        <StatCard title={t('reports.totalExpenses')} value={formatCurrency(monthlyData.totalExpenses)} icon="M9 14l6-6m-5.5.5h.01" />
+        <StatCard title={t('reports.netProfit')} value={formatCurrency(monthlyData.netProfit)} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense Breakdown */}
         <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">Expense Breakdown (৳{monthlyData.otherExpensesTotal.toFixed(2)})</h3>
+          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">{t('reports.expenseBreakdown', { amount: formatCurrency(monthlyData.otherExpensesTotal) })}</h3>
           <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
             <table className="w-full text-left text-sm">
               <thead className="border-b-2 border-gray-200 dark:border-gray-700">
-                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Date</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Description</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Amount</th></tr>
+                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('expenses.date')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('expenses.description')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.totalAmount')}</th></tr>
               </thead>
               <tbody>
                 {monthlyData.filteredExpenses.map(e => (
                   <tr key={e.id} className="border-b border-gray-100 dark:border-gray-800">
-                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{new Date(e.date).toLocaleDateString()}</td>
+                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{new Date(e.date).toLocaleDateString(language)}</td>
                     <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{e.description}</td>
-                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">৳{e.amount.toFixed(2)}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(e.amount)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -113,18 +119,18 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
 
         {/* Salary Breakdown */}
         <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">Salary Breakdown (৳{monthlyData.salaryExpensesTotal.toFixed(2)})</h3>
+          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">{t('reports.salaryBreakdown', { amount: formatCurrency(monthlyData.salaryExpensesTotal) })}</h3>
            <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
             <table className="w-full text-left text-sm">
               <thead className="border-b-2 border-gray-200 dark:border-gray-700">
-                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Employee</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Salary Details</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Amount</th></tr>
+                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('reports.employee')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('reports.salaryDetails')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.totalAmount')}</th></tr>
               </thead>
               <tbody>
                  {monthlyData.employeeSalaries.map(e => (
                   <tr key={e.id} className="border-b border-gray-100 dark:border-gray-800">
                     <td className="py-2 px-2 text-gray-900 dark:text-gray-100">{e.name}<br/><span className="text-xs text-gray-500 dark:text-gray-400">{e.role}</span></td>
-                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">৳{e.salary.toFixed(2)} / {e.salaryType}</td>
-                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">৳{e.calculatedSalary.toFixed(2)}</td>
+                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{formatCurrency(e.salary)} / {t(`enums.salaryType.${e.salaryType}`)}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(e.calculatedSalary)}</td>
                   </tr>
                 ))}
               </tbody>

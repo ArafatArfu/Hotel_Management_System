@@ -3,6 +3,7 @@ import type { Order as OrderType, OrderItem, MenuItem } from '../types';
 import { Category, Status } from '../types';
 import ReceiptModal from './ReceiptModal';
 import { useAppContext } from '../context/AppContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface OrderProps {
   addOrder: (newOrder: OrderType) => void;
@@ -19,6 +20,11 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
   const [finalizedOrder, setFinalizedOrder] = useState<OrderType | null>(null);
   
   const { taxRate, serviceChargeRate, logo } = useAppContext();
+  const { t, language } = useLanguage();
+
+  const formatCurrency = useCallback((value: number) => {
+    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
+  }, [language]);
   
   const categories = ['All', ...Object.values(Category)];
 
@@ -100,13 +106,13 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
           <img 
             src={item.imageUrl || getPlaceholderUrl()} 
             alt={item.name} 
-            className="w-16 h-16 object-cover rounded-md mr-3 bg-gray-200 dark:bg-gray-700"
+            className="w-16 h-16 object-cover rounded-md me-3 bg-gray-200 dark:bg-gray-700"
             onError={handleImageError} 
           />
           <div className="flex-grow">
             <h4 className="font-bold text-brand-primary dark:text-gray-100 text-sm">{item.name}</h4>
             <p className="text-xs text-gray-500 dark:text-gray-400">{item.category}</p>
-            <p className="text-md font-semibold text-brand-secondary dark:text-gray-300 mt-1">৳{item.price}</p>
+            <p className="text-md font-semibold text-brand-secondary dark:text-gray-300 mt-1">{formatCurrency(item.price)}</p>
           </div>
       </div>
     );
@@ -116,10 +122,10 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
       {/* Menu Selection */}
       <div className="lg:col-span-3 space-y-4">
-        <h2 className="text-2xl font-bold text-brand-primary dark:text-gray-100 font-serif">Add Items to Order</h2>
+        <h2 className="text-2xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('order.title')}</h2>
         <input
           type="text"
-          placeholder="Search for a dish..."
+          placeholder={t('menu.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
@@ -130,11 +136,11 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
               key={category}
               onClick={() => setSelectedCategory(category as Category | 'All')}
               className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${selectedCategory === category ? 'bg-brand-primary text-white' : 'bg-white dark:bg-brand-surface-dark dark:text-gray-200 hover:bg-brand-secondary hover:text-white'}`}>
-              {category}
+              {category === 'All' ? t('menu.all') : category}
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pe-2">
           {availableMenuItems.map(item => (
             <MenuItemCard key={item.id} item={item} onAdd={() => addToOrder(item)} />
           ))}
@@ -143,16 +149,16 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
 
       {/* Current Order */}
       <div className="lg:col-span-2 bg-brand-surface dark:bg-brand-surface-dark p-4 rounded-lg shadow-md flex flex-col h-fit sticky top-24">
-        <h2 className="text-2xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4 border-b dark:border-gray-700 pb-2">Current Bill</h2>
-        <div className="flex-grow space-y-2 max-h-[40vh] overflow-y-auto pr-2">
+        <h2 className="text-2xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4 border-b dark:border-gray-700 pb-2">{t('order.currentBill')}</h2>
+        <div className="flex-grow space-y-2 max-h-[40vh] overflow-y-auto pe-2">
           {currentOrderItems.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-8">No items added yet.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-8">{t('order.noItems')}</p>
           ) : (
             currentOrderItems.map(item => (
               <div key={item.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">৳{item.price.toFixed(2)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(item.price)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -161,7 +167,7 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
                     onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 0)}
                     className="w-16 text-center border rounded border-gray-300 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 p-1 focus:ring-brand-primary focus:border-brand-primary"
                   />
-                  <p className="w-20 text-right font-semibold text-gray-900 dark:text-gray-100">৳{(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="w-20 text-right font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(item.price * item.quantity)}</p>
                 </div>
               </div>
             ))
@@ -170,22 +176,22 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
 
         {/* Totals */}
         <div className="border-t dark:border-gray-700 mt-4 pt-4 space-y-2 text-sm">
-          <div className="flex justify-between text-gray-800 dark:text-gray-200"><span>Subtotal</span><span>৳{calculations.subtotal.toFixed(2)}</span></div>
+          <div className="flex justify-between text-gray-800 dark:text-gray-200"><span>{t('order.subtotal')}</span><span>{formatCurrency(calculations.subtotal)}</span></div>
           <div className="flex justify-between items-center">
-            <label className="text-gray-800 dark:text-gray-200">Discount</label>
+            <label className="text-gray-800 dark:text-gray-200">{t('order.discount')}</label>
             <input type="number" value={discount} onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)} className="w-24 text-right border rounded p-1 border-gray-300 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"/>
           </div>
-          <div className="flex justify-between text-gray-800 dark:text-gray-200"><span>Tax ({taxRate * 100}%)</span><span>৳{calculations.tax.toFixed(2)}</span></div>
+          <div className="flex justify-between text-gray-800 dark:text-gray-200"><span>{t('order.tax', { rate: (taxRate * 100).toFixed(0) })}</span><span>{formatCurrency(calculations.tax)}</span></div>
            <div className="flex justify-between items-center">
             <label className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
               <input type="checkbox" checked={useServiceCharge} onChange={(e) => setUseServiceCharge(e.target.checked)} className="rounded text-brand-primary focus:ring-brand-primary"/>
-              Service Charge ({serviceChargeRate * 100}%)
+              {t('order.serviceCharge', { rate: (serviceChargeRate * 100).toFixed(0) })}
             </label>
-            <span className="text-gray-800 dark:text-gray-200">৳{calculations.serviceCharge.toFixed(2)}</span>
+            <span className="text-gray-800 dark:text-gray-200">{formatCurrency(calculations.serviceCharge)}</span>
           </div>
           <div className="border-t dark:border-gray-700 mt-2 pt-2 text-xl font-bold flex justify-between text-brand-primary dark:text-gray-100">
-            <span>Grand Total</span>
-            <span>৳{calculations.grandTotal.toFixed(2)}</span>
+            <span>{t('order.grandTotal')}</span>
+            <span>{formatCurrency(calculations.grandTotal)}</span>
           </div>
         </div>
 
@@ -193,7 +199,7 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
           onClick={handleGenerateReceipt} 
           disabled={currentOrderItems.length === 0}
           className="w-full mt-4 bg-brand-primary text-white py-3 rounded-lg font-bold text-lg hover:bg-opacity-90 disabled:bg-gray-400 dark:disabled:bg-gray-600">
-            Generate Receipt
+            {t('order.generateReceipt')}
         </button>
       </div>
       {showReceipt && finalizedOrder && (
