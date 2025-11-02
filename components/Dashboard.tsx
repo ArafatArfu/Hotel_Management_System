@@ -130,38 +130,42 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, expenses, isAd
       <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">{t('dashboard.orderHistory')}</h3>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="border-b-2 border-gray-200 dark:border-gray-700">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th className="py-2 px-4 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.receiptNo')}</th>
-                <th className="py-2 px-4 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.dateTime')}</th>
-                <th className="py-2 px-4 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.items')}</th>
-                <th className="py-2 px-4 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.totalAmount')}</th>
-                <th className="py-2 px-4 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.actions')}</th>
+                <th scope="col" className="px-6 py-3">{t('dashboard.receiptNo')}</th>
+                <th scope="col" className="px-6 py-3">{t('dashboard.dateTime')}</th>
+                <th scope="col" className="px-6 py-3">{t('dashboard.itemCount')}</th>
+                <th scope="col" className="px-6 py-3">{t('dashboard.totalAmount')}</th>
+                <th scope="col" className="px-6 py-3">{t('dashboard.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {sortedOrders.map(order => (
-                <tr key={order.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                  <td className="py-3 px-4 font-semibold text-gray-900 dark:text-gray-100">{order.id}</td>
-                  <td className="py-3 px-4 text-gray-800 dark:text-gray-200">{formatDateTime(order.date)}</td>
-                  <td className="py-3 px-4 text-gray-800 dark:text-gray-200">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
-                  <td className="py-3 px-4 font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(order.grandTotal)}</td>
-                  <td className="py-3 px-4 space-x-3">
-                    <button 
-                      onClick={() => setSelectedOrder(order)}
-                      className="text-brand-primary dark:text-brand-secondary hover:underline text-sm font-medium"
-                    >
-                      {t('dashboard.viewReceipt')}
-                    </button>
-                    {isAdmin && (
-                        <button
-                          onClick={() => handleDelete(order.id)}
-                          className="text-red-600 hover:underline text-sm font-medium"
-                        >
-                          {t('dashboard.delete')}
-                        </button>
-                    )}
+                <tr key={order.id} className="bg-white border-b dark:bg-brand-surface-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {order.id}
+                  </th>
+                  <td className="px-6 py-4">{formatDateTime(order.date)}</td>
+                  <td className="px-6 py-4 text-center">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
+                  <td className="px-6 py-4 font-medium">{formatCurrency(order.grandTotal)}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-4">
+                      <button 
+                        onClick={() => setSelectedOrder(order)}
+                        className="font-medium text-brand-primary dark:text-brand-secondary hover:underline"
+                      >
+                        {t('dashboard.viewReceipt')}
+                      </button>
+                      {isAdmin && (
+                          <button
+                            onClick={() => handleDelete(order.id)}
+                            className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                          >
+                            {t('dashboard.delete')}
+                          </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

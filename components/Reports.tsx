@@ -76,6 +76,13 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
       employeeSalaries
     };
   }, [selectedMonth, orders, expenses, employees]);
+
+  const yearlySales = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return orders
+      .filter(order => new Date(order.date).getFullYear() === currentYear)
+      .reduce((sum, order) => sum + order.grandTotal, 0);
+  }, [orders]);
   
   const handlePrint = () => {
     window.print();
@@ -99,10 +106,11 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title={t('reports.totalRevenue')} value={formatCurrency(monthlyData.revenue)} icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
         <StatCard title={t('reports.totalExpenses')} value={formatCurrency(monthlyData.totalExpenses)} icon="M9 14l6-6m-5.5.5h.01" />
         <StatCard title={t('reports.netProfit')} value={formatCurrency(monthlyData.netProfit)} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        <StatCard title={t('reports.yearlySales')} value={formatCurrency(yearlySales)} icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-8h1m-1 4h1m-1 4h1M9 21v-3.072a2 2 0 01.714-1.414l.857-.857A2 2 0 0112.14 15.5h-.285a2 2 0 01-1.414-.586l-.857-.857A2 2 0 019 12.072V9z" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
