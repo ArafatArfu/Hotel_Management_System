@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import type { Employee } from '../types';
 import { SalaryType, EmployeeStatus } from '../types';
 
@@ -104,6 +103,17 @@ interface EmployeesProps {
 const Employees: React.FC<EmployeesProps> = ({ employees, onAdd, onUpdate, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredEmployees = useMemo(() => {
+    const lowercasedFilter = searchTerm.toLowerCase();
+    if (!lowercasedFilter) return employees;
+    return employees.filter(employee =>
+      employee.name.toLowerCase().includes(lowercasedFilter) ||
+      employee.role.toLowerCase().includes(lowercasedFilter)
+    );
+  }, [employees, searchTerm]);
+
 
   const handleAdd = () => {
     setEditingEmployee(null);
@@ -139,6 +149,16 @@ const Employees: React.FC<EmployeesProps> = ({ employees, onAdd, onUpdate, onDel
       </div>
 
       <div className="bg-brand-surface p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+            <input
+                type="text"
+                placeholder="Search by name or role..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full max-w-md p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary"
+                aria-label="Search employees"
+            />
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="border-b-2 border-gray-200">
@@ -151,24 +171,32 @@ const Employees: React.FC<EmployeesProps> = ({ employees, onAdd, onUpdate, onDel
               </tr>
             </thead>
             <tbody>
-              {employees.map(employee => (
-                <tr key={employee.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4 font-semibold text-gray-900">{employee.name}</td>
-                  <td className="py-3 px-4 text-gray-800">{employee.role}</td>
-                  <td className="py-3 px-4 text-gray-800">৳{employee.salary.toLocaleString()} / {employee.salaryType}</td>
-                  <td className="py-3 px-4">
-                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                        employee.status === EmployeeStatus.ACTIVE ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                      {employee.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 space-x-2">
-                    <button onClick={() => handleEdit(employee)} className="text-blue-600 hover:underline text-sm font-medium">Edit</button>
-                    <button onClick={() => handleDelete(employee.id)} className="text-red-600 hover:underline text-sm font-medium">Delete</button>
+              {filteredEmployees.length > 0 ? (
+                filteredEmployees.map(employee => (
+                  <tr key={employee.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-3 px-4 font-semibold text-gray-900">{employee.name}</td>
+                    <td className="py-3 px-4 text-gray-800">{employee.role}</td>
+                    <td className="py-3 px-4 text-gray-800">৳{employee.salary.toLocaleString()} / {employee.salaryType}</td>
+                    <td className="py-3 px-4">
+                       <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                          employee.status === EmployeeStatus.ACTIVE ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                        {employee.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 space-x-2">
+                      <button onClick={() => handleEdit(employee)} className="text-blue-600 hover:underline text-sm font-medium">Edit</button>
+                      <button onClick={() => handleDelete(employee.id)} className="text-red-600 hover:underline text-sm font-medium">Delete</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-gray-500">
+                    No employees found matching your search.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

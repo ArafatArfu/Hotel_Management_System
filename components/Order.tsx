@@ -1,6 +1,4 @@
-
 import React, { useState, useMemo, useCallback } from 'react';
-import { menuItems } from '../data/menu';
 import type { Order as OrderType, OrderItem, MenuItem } from '../types';
 import { Category, Status } from '../types';
 import ReceiptModal from './ReceiptModal';
@@ -8,9 +6,10 @@ import { useAppContext } from '../context/AppContext';
 
 interface OrderProps {
   addOrder: (newOrder: OrderType) => void;
+  menuItems: MenuItem[];
 }
 
-const Order: React.FC<OrderProps> = ({ addOrder }) => {
+const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
   const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
@@ -19,7 +18,7 @@ const Order: React.FC<OrderProps> = ({ addOrder }) => {
   const [showReceipt, setShowReceipt] = useState(false);
   const [finalizedOrder, setFinalizedOrder] = useState<OrderType | null>(null);
   
-  const { taxRate, serviceChargeRate } = useAppContext();
+  const { taxRate, serviceChargeRate, logo } = useAppContext();
   
   const categories = ['All', ...Object.values(Category)];
 
@@ -30,7 +29,7 @@ const Order: React.FC<OrderProps> = ({ addOrder }) => {
       const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return isAvailable && matchesCategory && matchesSearch;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, menuItems]);
 
   const addToOrder = (item: MenuItem) => {
     setCurrentOrderItems(prevItems => {
@@ -85,15 +84,33 @@ const Order: React.FC<OrderProps> = ({ addOrder }) => {
     }
   };
 
-  const MenuItemCard: React.FC<{ item: MenuItem; onAdd: () => void }> = ({ item, onAdd }) => (
-    <div className="bg-brand-surface rounded-lg shadow flex flex-col justify-between p-3 cursor-pointer hover:shadow-lg" onClick={onAdd}>
-        <div>
-          <h4 className="font-bold text-brand-primary">{item.name}</h4>
-          <p className="text-sm text-gray-500">{item.category}</p>
-        </div>
-        <p className="text-lg font-semibold text-brand-secondary mt-1 self-end">৳{item.price}</p>
-    </div>
-  );
+  const MenuItemCard: React.FC<{ item: MenuItem; onAdd: () => void }> = ({ item, onAdd }) => {
+    const getPlaceholderUrl = () => {
+      return `https://via.placeholder.com/128x128.png/5D4037/FFFFFF?text=${encodeURIComponent(item.name)}`;
+    };
+
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+      const target = e.target as HTMLImageElement;
+      target.onerror = null; // Prevents infinite loops
+      target.src = getPlaceholderUrl();
+    };
+
+    return (
+      <div className="bg-brand-surface rounded-lg shadow flex items-center p-2 cursor-pointer hover:shadow-lg transition-shadow" onClick={onAdd}>
+          <img 
+            src={item.imageUrl || getPlaceholderUrl()} 
+            alt={item.name} 
+            className="w-16 h-16 object-cover rounded-md mr-3 bg-gray-200"
+            onError={handleImageError} 
+          />
+          <div className="flex-grow">
+            <h4 className="font-bold text-brand-primary text-sm">{item.name}</h4>
+            <p className="text-xs text-gray-500">{item.category}</p>
+            <p className="text-md font-semibold text-brand-secondary mt-1">৳{item.price}</p>
+          </div>
+      </div>
+    );
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -180,7 +197,7 @@ const Order: React.FC<OrderProps> = ({ addOrder }) => {
         </button>
       </div>
       {showReceipt && finalizedOrder && (
-        <ReceiptModal order={finalizedOrder} onClose={() => setShowReceipt(false)} onConfirm={handleConfirmOrder} />
+        <ReceiptModal order={finalizedOrder} logo={logo} onClose={() => setShowReceipt(false)} onConfirm={handleConfirmOrder} />
       )}
     </div>
   );

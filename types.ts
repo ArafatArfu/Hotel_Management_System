@@ -1,4 +1,3 @@
-
 export enum Category {
   CHICKEN = 'Chicken',
   BEEF = 'Beef',
@@ -24,6 +23,7 @@ export interface MenuItem {
   category: Category;
   price: number;
   status: Status;
+  imageUrl: string;
 }
 
 export interface OrderItem extends MenuItem {

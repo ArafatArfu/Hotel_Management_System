@@ -1,14 +1,14 @@
-
 import React from 'react';
 import type { Order } from '../types';
 
 interface ReceiptModalProps {
   order: Order;
+  logo: string;
   onClose: () => void;
   onConfirm?: () => void;
 }
 
-const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, onClose, onConfirm }) => {
+const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onConfirm }) => {
   const handlePrint = () => {
     window.print();
   };
@@ -25,7 +25,7 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, onClose, onConfirm }
         {/* Receipt Content for both screen and print */}
         <div id="receipt-content" className="font-mono text-sm text-black">
           <div className="text-center mb-4">
-            <h3 className="text-xl font-bold">Al Madina Hotel</h3>
+            <img src={logo} alt="Restaurant Logo" className="w-32 h-auto mx-auto mb-2" />
             <p>123 Restaurant St, Food City</p>
             <p>Contact: +880123456789</p>
           </div>
@@ -35,19 +35,20 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, onClose, onConfirm }
             <p>Receipt No: {order.id}</p>
           </div>
           <div>
-            <div className="flex justify-between font-bold">
-              <span>Item</span>
-              <span>Total</span>
+            <div className="flex font-bold border-b border-dashed border-black pb-1 mb-1">
+              <span className="flex-1">Item</span>
+              <span className="w-24 text-right">Details</span>
+              <span className="w-20 text-right">Total</span>
             </div>
-            {order.items.map(item => (
-              <div key={item.id} className="flex justify-between">
-                <div>
-                  <p>{item.name}</p>
-                  <p className="pl-2">({item.quantity} x {item.price.toFixed(2)})</p>
+            <div>
+              {order.items.map(item => (
+                <div key={item.id} className="flex py-0.5">
+                  <span className="flex-1 pr-1">{item.name}</span>
+                  <span className="w-24 text-right text-xs">{item.quantity} x {item.price.toFixed(2)}</span>
+                  <span className="w-20 text-right">{(item.quantity * item.price).toFixed(2)}</span>
                 </div>
-                <span>{(item.quantity * item.price).toFixed(2)}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div className="border-t border-dashed border-black mt-2 pt-2 space-y-1">
             <div className="flex justify-between"><span>Subtotal:</span><span>{order.subtotal.toFixed(2)}</span></div>

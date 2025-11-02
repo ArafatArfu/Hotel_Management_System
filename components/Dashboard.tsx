@@ -1,10 +1,12 @@
-
 import React, { useMemo, useState } from 'react';
 import type { Order } from '../types';
 import ReceiptModal from './ReceiptModal';
+import { useAppContext } from '../context/AppContext';
 
 interface DashboardProps {
   orders: Order[];
+  isAdmin: boolean;
+  onDeleteOrder: (orderId: string) => void;
 }
 
 const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ title, value, icon }) => (
@@ -21,8 +23,9 @@ const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ ti
   </div>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ orders }) => {
+const Dashboard: React.FC<DashboardProps> = ({ orders, isAdmin, onDeleteOrder }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const { logo } = useAppContext();
 
   const today = new Date().toISOString().split('T')[0];
   const todaysOrders = useMemo(() => orders.filter(order => order.date.startsWith(today)), [orders, today]);
@@ -52,7 +55,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders }) => {
                 <th className="py-2 px-4 text-gray-600 font-medium">Date & Time</th>
                 <th className="py-2 px-4 text-gray-600 font-medium">Items</th>
                 <th className="py-2 px-4 text-gray-600 font-medium">Total Amount</th>
-                <th className="py-2 px-4 text-gray-600 font-medium">Action</th>
+                <th className="py-2 px-4 text-gray-600 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -62,13 +65,21 @@ const Dashboard: React.FC<DashboardProps> = ({ orders }) => {
                   <td className="py-3 px-4 text-gray-800">{new Date(order.date).toLocaleString()}</td>
                   <td className="py-3 px-4 text-gray-800">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
                   <td className="py-3 px-4 font-semibold text-gray-900">৳{order.grandTotal.toFixed(2)}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 space-x-3">
                     <button 
                       onClick={() => setSelectedOrder(order)}
                       className="text-brand-primary hover:underline text-sm font-medium"
                     >
                       View Receipt
                     </button>
+                    {isAdmin && (
+                        <button
+                          onClick={() => onDeleteOrder(order.id)}
+                          className="text-red-600 hover:underline text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -76,7 +87,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders }) => {
           </table>
         </div>
       </div>
-      {selectedOrder && <ReceiptModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
+      {selectedOrder && <ReceiptModal order={selectedOrder} logo={logo} onClose={() => setSelectedOrder(null)} />}
     </div>
   );
 };
