@@ -16,6 +16,7 @@ export const translations = {
     yearlySales: { en: 'Yearly Sales', ar: 'المبيعات السنوية', es: 'Ventas Anuales', fr: 'Ventes Annuelles', bn: 'বার্ষিক বিক্রয়' },
     totalOrders: { en: 'Total Orders', ar: 'إجمالي الطلبات', es: 'Pedidos Totales', fr: 'Commandes Totales', bn: 'মোট অর্ডার' },
     totalCustomers: { en: 'Total Customers', ar: 'إجمالي العملاء', es: 'Clientes Totales', fr: 'Clients Totaux', bn: 'মোট গ্রাহক' },
+    totalEmployees: { en: 'Total Employees', ar: 'إجمالي الموظفين', es: 'Total de Empleados', fr: 'Total des Employés', bn: 'মোট কর্মচারী' },
     orderHistory: { en: 'Order History', ar: 'سجل الطلبات', es: 'Historial de Pedidos', fr: 'Historique des Commandes', bn: 'অর্ডারের ইতিহাস' },
     receiptNo: { en: 'Receipt No', ar: 'رقم الإيصال', es: 'Nº de Recibo', fr: 'N° de Reçu', bn: 'রসিদ নং' },
     dateTime: { en: 'Date & Time', ar: 'التاريخ والوقت', es: 'Fecha y Hora', fr: 'Date et Heure', bn: 'তারিখ ও সময়' },
@@ -55,7 +56,8 @@ export const translations = {
   receiptModal: {
     title: { en: 'Order Receipt', ar: 'إيصال الطلب', es: 'Recibo de Pedido', fr: 'Reçu de Commande', bn: 'অর্ডার রসিদ' },
     close: { en: 'Close', ar: 'إغلاق', es: 'Cerrar', fr: 'Fermer', bn: 'বন্ধ করুন' },
-    print: { en: 'Print Receipt', ar: 'طباعة الإيصال', es: 'Imprimir Recibo', fr: 'Imprimer le Reçu', bn: 'রসিদ মুদ্রণ করুন' },
+    print: { en: 'Print', ar: 'طباعة', es: 'Imprimir', fr: 'Imprimer', bn: 'প্রিন্ট' },
+    saveAsPdf: { en: 'Download', ar: 'تحميل', es: 'Descargar', fr: 'Télécharger', bn: 'ডাউনলোড' },
     confirm: { en: 'Confirm Order', ar: 'تأكيد الطلب', es: 'Confirmar Pedido', fr: 'Confirmer la Commande', bn: 'অর্ডার নিশ্চিত করুন' },
     thankYou: { en: 'Thank you for dining with us!', ar: 'شكرا لتناول الطعام معنا!', es: '¡Gracias por cenar con nosotros!', fr: 'Merci de dîner avec nous !', bn: 'আমাদের সাথে ডাইনিং করার জন্য আপনাকে ধন্যবাদ!' },
   },
@@ -91,6 +93,7 @@ export const translations = {
     salaryBreakdown: { en: 'Salary Breakdown ({amount})', ar: 'تفصيل الرواتب ({amount})', es: 'Desglose de Salarios ({amount})', fr: 'Répartition des salaires ({amount})', bn: 'বেতনের ভাঙ্গন ({amount})' },
     employee: { en: 'Employee', ar: 'الموظف', es: 'Empleado', fr: 'Employé', bn: 'কর্মচারী' },
     salaryDetails: { en: 'Salary Details', ar: 'تفاصيل الراتب', es: 'Detalles del Salario', fr: 'Détails du Salaire', bn: 'বেতনের বিবরণ' },
+    downloadPdf: { en: 'Download as PDF', ar: 'تنزيل كملف PDF', es: 'Descargar como PDF', fr: 'Télécharger en PDF', bn: 'পিডিএফ হিসাবে ডাউনলোড করুন' },
   },
   settings: {
     title: { en: 'Settings', ar: 'الإعدادات', es: 'Ajustes', fr: 'Paramètres', bn: 'সেটিংস' },

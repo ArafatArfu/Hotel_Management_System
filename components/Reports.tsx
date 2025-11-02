@@ -76,17 +76,27 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
       employeeSalaries
     };
   }, [selectedMonth, orders, expenses, employees]);
+  
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('reports.title')}</h2>
-        <input
-          type="month"
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
-        />
+        <div className="flex items-center gap-4 print:hidden">
+            <input
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
+            />
+            <button onClick={handlePrint} className="bg-brand-primary text-white px-4 py-2 rounded-md shadow hover:bg-opacity-90 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                {t('reports.downloadPdf')}
+            </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,7 +109,7 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
         {/* Expense Breakdown */}
         <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">{t('reports.expenseBreakdown', { amount: formatCurrency(monthlyData.otherExpensesTotal) })}</h3>
-          <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
+          <div className="overflow-x-auto max-h-[40vh] overflow-y-auto print:max-h-full print:overflow-visible">
             <table className="w-full text-left text-sm">
               <thead className="border-b-2 border-gray-200 dark:border-gray-700">
                 <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('expenses.date')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('expenses.description')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.totalAmount')}</th></tr>
@@ -120,7 +130,7 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
         {/* Salary Breakdown */}
         <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">{t('reports.salaryBreakdown', { amount: formatCurrency(monthlyData.salaryExpensesTotal) })}</h3>
-           <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
+           <div className="overflow-x-auto max-h-[40vh] overflow-y-auto print:max-h-full print:overflow-visible">
             <table className="w-full text-left text-sm">
               <thead className="border-b-2 border-gray-200 dark:border-gray-700">
                 <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('reports.employee')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('reports.salaryDetails')}</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">{t('dashboard.totalAmount')}</th></tr>

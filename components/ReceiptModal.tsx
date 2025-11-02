@@ -2,6 +2,9 @@ import React from 'react';
 import type { Order } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
+declare const html2canvas: any;
+declare const jspdf: any;
+
 interface ReceiptModalProps {
   order: Order;
   logo: string;
@@ -16,6 +19,32 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
     window.print();
   };
   
+  const handleSaveAsPdf = () => {
+    const { jsPDF } = jspdf;
+    const receiptElement = document.getElementById('receipt-content');
+    if (receiptElement) {
+        html2canvas(receiptElement, {
+            scale: 2, // Increase scale for better quality
+            useCORS: true,
+        }).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            
+            // Typical thermal receipt width is ~80mm.
+            const pdfWidth = 80; // mm
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [pdfWidth, pdfHeight]
+            });
+
+            doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            doc.save(`receipt-${order.id.replace('#', '')}.pdf`);
+        });
+    }
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
   }
@@ -33,11 +62,11 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
         </div>
         
         {/* Receipt Content for both screen and print */}
-        <div id="receipt-content" className="font-mono text-sm text-black">
+        <div id="receipt-content" className="font-mono text-sm text-black bg-white p-2">
           <div className="text-center mb-4">
             <img src={logo} alt="Restaurant Logo" className="w-32 h-auto mx-auto mb-2" />
-            <p>123 Restaurant St, Food City</p>
-            <p>Contact: +880123456789</p>
+            <p>1216-West Shewrapara, Mirpur 10</p>
+            <p>Contact: +8801871520684</p>
           </div>
           <div className="border-t border-b border-dashed border-black py-2 mb-2">
             <p>{t('expenses.date')}: {formatDate(order.date)}</p>
@@ -76,10 +105,11 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
         </div>
         
         {/* Action buttons for screen only */}
-        <div className="mt-6 flex justify-end space-x-3 print:hidden">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">{t('receiptModal.close')}</button>
-          <button onClick={handlePrint} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">{t('receiptModal.print')}</button>
-          {onConfirm && <button onClick={onConfirm} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">{t('receiptModal.confirm')}</button>}
+        <div className="mt-6 flex justify-end space-x-2 print:hidden">
+          <button onClick={onClose} className="px-3 py-1.5 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300">{t('receiptModal.close')}</button>
+          <button onClick={handlePrint} className="px-3 py-1.5 text-sm font-medium bg-blue-500 text-white rounded-md hover:bg-blue-600">{t('receiptModal.print')}</button>
+          <button onClick={handleSaveAsPdf} className="px-3 py-1.5 text-sm font-medium bg-teal-500 text-white rounded-md hover:bg-teal-600">{t('receiptModal.saveAsPdf')}</button>
+          {onConfirm && <button onClick={onConfirm} className="px-3 py-1.5 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600">{t('receiptModal.confirm')}</button>}
         </div>
       </div>
       <style>

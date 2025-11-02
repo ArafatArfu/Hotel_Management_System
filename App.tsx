@@ -121,7 +121,7 @@ const AppContent: React.FC = () => {
     }
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard orders={orders} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
+        return <Dashboard orders={orders} employees={employees} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
       case 'menu':
         return <Menu menuItems={menuItems} onImageChange={handleImageChange} isAdmin={isAdmin} onAdd={addMenuItem} onUpdate={updateMenuItem} onDelete={deleteMenuItem} />;
       case 'order':
@@ -135,7 +135,7 @@ const AppContent: React.FC = () => {
       case 'settings':
         return <Settings />;
       default:
-        return <Dashboard orders={orders} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
+        return <Dashboard orders={orders} employees={employees} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
     }
   };
 
@@ -154,7 +154,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen font-sans text-gray-800 dark:text-gray-200">
-      <header className="bg-brand-surface dark:bg-brand-surface-dark shadow-md sticky top-0 z-10">
+      <header className="bg-brand-surface dark:bg-brand-surface-dark shadow-md sticky top-0 z-10 print:hidden">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
             <img src={logo} alt="Al Madina Restaurant logo" className="h-20 w-auto object-contain" />

@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import type { Order } from '../types';
+import type { Order, Employee } from '../types';
+import { EmployeeStatus } from '../types';
 import ReceiptModal from './ReceiptModal';
 import { useAppContext } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 
 interface DashboardProps {
   orders: Order[];
+  employees: Employee[];
   isAdmin: boolean;
   onDeleteOrder: (orderId: string) => void;
 }
@@ -24,7 +26,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ ti
   </div>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ orders, isAdmin, onDeleteOrder }) => {
+const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDeleteOrder }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { logo } = useAppContext();
   const { t, language } = useLanguage();
@@ -56,6 +58,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, isAdmin, onDeleteOrder })
   const totalSalesToday = useMemo(() => todaysOrders.reduce((sum, order) => sum + order.grandTotal, 0), [todaysOrders]);
   const totalOrdersToday = useMemo(() => todaysOrders.length, [todaysOrders]);
   const totalCustomersToday = useMemo(() => todaysOrders.length, [todaysOrders]); // Assuming 1 order = 1 customer for simplicity
+  const totalActiveEmployees = useMemo(() => employees.filter(e => e.status === EmployeeStatus.ACTIVE).length, [employees]);
 
   const sortedOrders = useMemo(() => [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [orders]);
   
@@ -76,6 +79,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, isAdmin, onDeleteOrder })
         <StatCard title={t('dashboard.yearlySales')} value={formatCurrency(yearlySales)} icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-8h1m-1 4h1m-1 4h1M9 21v-3.072a2 2 0 01.714-1.414l.857-.857A2 2 0 0112.14 15.5h-.285a2 2 0 01-1.414-.586l-.857-.857A2 2 0 019 12.072V9z" />
         <StatCard title={t('dashboard.totalOrders')} value={String(totalOrdersToday)} icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         <StatCard title={t('dashboard.totalCustomers')} value={String(totalCustomersToday)} icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197" />
+        <StatCard title={t('dashboard.totalEmployees')} value={String(totalActiveEmployees)} icon="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8zM17 8a4 4 0 11-8 0 4 4 0 018 0z" />
       </div>
 
       <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
