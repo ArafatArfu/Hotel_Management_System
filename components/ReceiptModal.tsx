@@ -15,7 +15,7 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 print:bg-white print:items-start">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative print:shadow-none print:p-0">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative print:shadow-none print:p-0 text-black">
         {/* Modal content for screen */}
         <div className="print:hidden">
           <h2 className="text-2xl font-bold text-center mb-4">Order Receipt</h2>

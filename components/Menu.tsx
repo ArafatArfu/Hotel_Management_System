@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import type { MenuItem } from '../types';
 import { Category, Status } from '../types';
@@ -30,12 +29,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
   };
 
   return (
-    <div className="bg-brand-surface rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col group">
+    <div className="bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col group">
       <div className="relative">
         <img
           src={item.imageUrl || getPlaceholderUrl()}
           alt={item.name}
-          className="w-full h-40 object-cover bg-gray-200"
+          className="w-full h-40 object-cover bg-gray-200 dark:bg-gray-700"
           onError={handleImageError}
         />
         {isAdmin && (
@@ -55,16 +54,16 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-start">
-          <h4 className="text-lg font-bold text-brand-primary">{item.name}</h4>
+          <h4 className="text-lg font-bold text-brand-primary dark:text-gray-100">{item.name}</h4>
           <span className={`text-sm font-semibold px-2 py-1 rounded-full whitespace-nowrap ${
-            item.status === Status.AVAILABLE ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            item.status === Status.AVAILABLE ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
           }`}>
             {item.status}
           </span>
         </div>
-        <p className="text-sm text-gray-500 mt-1">{item.category}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{item.category}</p>
         <div className="mt-auto pt-2 flex justify-between items-center">
-          <p className="text-xl font-bold text-brand-secondary">৳{item.price.toFixed(2)}</p>
+          <p className="text-xl font-bold text-brand-secondary dark:text-gray-300">৳{item.price.toFixed(2)}</p>
           {isAdmin && (
             <div className="space-x-2">
                 <button onClick={() => onEdit(item)} className="text-xs text-blue-600 hover:underline">Edit</button>
@@ -123,7 +122,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <h2 className="text-3xl font-bold text-brand-primary font-serif">Our Menu</h2>
+        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">Our Menu</h2>
         {isAdmin && (
             <button onClick={handleAddNew} className="bg-brand-primary text-white px-4 py-2 rounded-md shadow hover:bg-opacity-90">
                 Add New Item
@@ -136,7 +135,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
           placeholder="Search for a dish..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-grow p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary"
+          className="flex-grow p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
         />
       </div>
       <div className="flex flex-wrap gap-2">
@@ -147,7 +146,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
             className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
               selectedCategory === category
                 ? 'bg-brand-primary text-white'
-                : 'bg-brand-surface hover:bg-brand-secondary hover:text-white'
+                : 'bg-brand-surface dark:bg-brand-surface-dark dark:text-gray-200 hover:bg-brand-secondary hover:text-white'
             }`}
           >
             {category}
@@ -158,7 +157,7 @@ const Menu: React.FC<MenuProps> = ({ menuItems, isAdmin, onImageChange, onAdd, o
         {filteredItems.length > 0 ? (
           filteredItems.map(item => <MenuItemCard key={item.id} item={item} isAdmin={isAdmin} onImageChange={onImageChange} onEdit={handleEdit} onDelete={onDelete} />)
         ) : (
-          <p className="col-span-full text-center text-gray-500">No menu items match your criteria.</p>
+          <p className="col-span-full text-center text-gray-500 dark:text-gray-400">No menu items match your criteria.</p>
         )}
       </div>
       {isModalOpen && <MenuItemModal item={editingItem} onClose={() => setIsModalOpen(false)} onSave={handleSave} />}

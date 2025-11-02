@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import Menu from './components/Menu';
 import Order from './components/Order';
@@ -19,7 +19,7 @@ type Page = 'dashboard' | 'menu' | 'order' | 'employees' | 'expenses' | 'reports
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
-  const { logo } = useAppContext();
+  const { logo, theme } = useAppContext();
   const isAdmin = user?.role === 'admin';
 
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
@@ -28,6 +28,14 @@ const AppContent: React.FC = () => {
   const [expenses, setExpenses] = useState<ExpenseType[]>(initialExpenses);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
   
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   // Order CRUD
   const addOrder = useCallback((newOrder: OrderType) => {
     setOrders(prevOrders => [...prevOrders, newOrder]);
@@ -102,9 +110,9 @@ const AppContent: React.FC = () => {
   const renderPage = () => {
     if (!isAdmin && adminPages.includes(currentPage)) {
         return (
-            <div className="text-center p-8 bg-brand-surface rounded-lg shadow-md">
+            <div className="text-center p-8 bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md">
                 <h2 className="text-3xl font-bold text-red-600 mb-2">Access Denied</h2>
-                <p className="text-gray-600">You do not have permission to view this page. Please contact an administrator.</p>
+                <p className="text-gray-600 dark:text-gray-300">You do not have permission to view this page. Please contact an administrator.</p>
             </div>
         );
     }
@@ -134,7 +142,7 @@ const AppContent: React.FC = () => {
       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
         currentPage === page
           ? 'bg-brand-primary text-white shadow-md'
-          : 'text-gray-700 hover:bg-brand-secondary hover:text-white'
+          : 'text-gray-700 dark:text-gray-300 hover:bg-brand-secondary hover:text-white'
       }`}
     >
       {label}
@@ -142,11 +150,11 @@ const AppContent: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-brand-bg font-sans text-gray-800">
-      <header className="bg-brand-surface shadow-md sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div className="min-h-screen font-sans text-gray-800 dark:text-gray-200">
+      <header className="bg-brand-surface dark:bg-brand-surface-dark shadow-md sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <img src={logo} alt="Al Madina Restaurant logo" className="h-16 w-auto object-contain" />
+            <img src={logo} alt="Al Madina Restaurant logo" className="h-20 w-auto object-contain" />
           </div>
           <nav className="flex items-center space-x-1 sm:space-x-2 flex-wrap justify-end">
             <NavButton page="dashboard" label="Dashboard" />
@@ -162,7 +170,7 @@ const AppContent: React.FC = () => {
             )}
             <button
               onClick={logout}
-              className="px-3 py-2 rounded-md text-sm font-medium text-red-700 hover:bg-red-100 transition-colors"
+              className="px-3 py-2 rounded-md text-sm font-medium text-red-700 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
             >
               Logout
             </button>

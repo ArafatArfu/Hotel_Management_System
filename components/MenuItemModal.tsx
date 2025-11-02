@@ -50,32 +50,32 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, onClose, onSave }) 
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">{item ? 'Edit Menu Item' : 'Add New Menu Item'}</h2>
+      <div className="bg-white dark:bg-brand-surface-dark p-6 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">{item ? 'Edit Menu Item' : 'Add New Menu Item'}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary"/>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"/>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Category</label>
-            <select name="category" value={formData.category} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+            <select name="category" value={formData.category} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary">
               {Object.values(Category).map(cat => <option key={cat} value={cat}>{cat}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Price (৳)</label>
-            <input type="number" name="price" value={formData.price} onChange={handleChange} required min="0" step="1" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary"/>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Price (৳)</label>
+            <input type="number" name="price" value={formData.price} onChange={handleChange} required min="0" step="1" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"/>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Status</label>
-            <select name="status" value={formData.status} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+            <select name="status" value={formData.status} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary">
               <option value={Status.AVAILABLE}>Available</option>
               <option value={Status.NOT_AVAILABLE}>Not Available</option>
             </select>
           </div>
           <div className="flex justify-end space-x-2 pt-4">
-            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 dark:bg-gray-600 dark:text-gray-100 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500">Cancel</button>
             <button type="submit" className="px-4 py-2 bg-brand-primary text-white rounded-md hover:bg-opacity-90">Save</button>
           </div>
         </form>

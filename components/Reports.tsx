@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import type { Order, Employee, Expense } from '../types';
 import { EmployeeStatus, SalaryType } from '../types';
@@ -10,15 +9,15 @@ interface ReportsProps {
 }
 
 const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ title, value, icon }) => (
-  <div className="bg-brand-surface p-6 rounded-lg shadow-md flex items-center space-x-4">
+  <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md flex items-center space-x-4">
     <div className="bg-brand-primary text-white p-3 rounded-full">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
       </svg>
     </div>
     <div>
-      <p className="text-sm text-gray-500">{title}</p>
-      <p className="text-2xl font-bold text-brand-primary">{value}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+      <p className="text-2xl font-bold text-brand-primary dark:text-gray-100">{value}</p>
     </div>
   </div>
 );
@@ -75,12 +74,12 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h2 className="text-3xl font-bold text-brand-primary font-serif">Monthly Profit Report</h2>
+        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">Monthly Profit Report</h2>
         <input
           type="month"
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-brand-primary focus:border-brand-primary"
+          className="p-2 border border-gray-300 rounded-md bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 focus:ring-brand-primary focus:border-brand-primary"
         />
       </div>
 
@@ -92,19 +91,19 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense Breakdown */}
-        <div className="bg-brand-surface p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold text-brand-primary font-serif mb-4">Expense Breakdown (৳{monthlyData.otherExpensesTotal.toFixed(2)})</h3>
+        <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
+          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">Expense Breakdown (৳{monthlyData.otherExpensesTotal.toFixed(2)})</h3>
           <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b-2 border-gray-200">
-                <tr><th className="py-2 px-2 text-gray-600 font-medium">Date</th><th className="py-2 px-2 text-gray-600 font-medium">Description</th><th className="py-2 px-2 text-gray-600 font-medium">Amount</th></tr>
+              <thead className="border-b-2 border-gray-200 dark:border-gray-700">
+                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Date</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Description</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Amount</th></tr>
               </thead>
               <tbody>
                 {monthlyData.filteredExpenses.map(e => (
-                  <tr key={e.id} className="border-b border-gray-100">
-                    <td className="py-2 px-2 text-gray-800">{new Date(e.date).toLocaleDateString()}</td>
-                    <td className="py-2 px-2 text-gray-800">{e.description}</td>
-                    <td className="py-2 px-2 font-semibold text-gray-900">৳{e.amount.toFixed(2)}</td>
+                  <tr key={e.id} className="border-b border-gray-100 dark:border-gray-800">
+                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{new Date(e.date).toLocaleDateString()}</td>
+                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">{e.description}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">৳{e.amount.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -113,19 +112,19 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
         </div>
 
         {/* Salary Breakdown */}
-        <div className="bg-brand-surface p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold text-brand-primary font-serif mb-4">Salary Breakdown (৳{monthlyData.salaryExpensesTotal.toFixed(2)})</h3>
+        <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
+          <h3 className="text-xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-4">Salary Breakdown (৳{monthlyData.salaryExpensesTotal.toFixed(2)})</h3>
            <div className="overflow-x-auto max-h-[40vh] overflow-y-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b-2 border-gray-200">
-                <tr><th className="py-2 px-2 text-gray-600 font-medium">Employee</th><th className="py-2 px-2 text-gray-600 font-medium">Salary Details</th><th className="py-2 px-2 text-gray-600 font-medium">Amount</th></tr>
+              <thead className="border-b-2 border-gray-200 dark:border-gray-700">
+                <tr><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Employee</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Salary Details</th><th className="py-2 px-2 text-gray-600 dark:text-gray-400 font-medium">Amount</th></tr>
               </thead>
               <tbody>
                  {monthlyData.employeeSalaries.map(e => (
-                  <tr key={e.id} className="border-b border-gray-100">
-                    <td className="py-2 px-2 text-gray-900">{e.name}<br/><span className="text-xs text-gray-500">{e.role}</span></td>
-                    <td className="py-2 px-2 text-gray-800">৳{e.salary.toFixed(2)} / {e.salaryType}</td>
-                    <td className="py-2 px-2 font-semibold text-gray-900">৳{e.calculatedSalary.toFixed(2)}</td>
+                  <tr key={e.id} className="border-b border-gray-100 dark:border-gray-800">
+                    <td className="py-2 px-2 text-gray-900 dark:text-gray-100">{e.name}<br/><span className="text-xs text-gray-500 dark:text-gray-400">{e.role}</span></td>
+                    <td className="py-2 px-2 text-gray-800 dark:text-gray-200">৳{e.salary.toFixed(2)} / {e.salaryType}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 dark:text-gray-100">৳{e.calculatedSalary.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
