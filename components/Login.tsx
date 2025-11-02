@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-brand-bg dark:bg-brand-bg-dark">
       <div className="w-full max-w-md p-8 space-y-6 bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md">
         <div className="text-center">
-            <img src={logo} alt="Al Madina Restaurant Logo" className="w-40 h-auto mx-auto mb-4 p-2 bg-white rounded-md" />
+            <img src={logo} alt="Al Madina Restaurant Logo" className="w-40 h-auto mx-auto mb-4 p-2 rounded-md" />
             <p className="text-gray-600 dark:text-gray-300">{t('login.title')}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">

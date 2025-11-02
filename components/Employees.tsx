@@ -134,7 +134,7 @@ const Employees: React.FC<EmployeesProps> = ({ employees, onAdd, onUpdate, onDel
 
   const handleDelete = (employeeId: number) => {
     if (window.confirm(t('confirmations.deleteEmployee'))) {
-      onDelete(employeeId);
+        onDelete(employeeId);
     }
   };
 

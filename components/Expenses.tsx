@@ -47,6 +47,12 @@ const Expenses: React.FC<ExpensesProps> = ({ expenses, onAdd, onDelete }) => {
     });
   };
 
+  const handleDelete = (expenseId: number) => {
+    if (window.confirm(t('confirmations.deleteExpense'))) {
+      onDelete(expenseId);
+    }
+  };
+
   return (
     <div>
        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif mb-6">{t('expenses.title')}</h2>
@@ -101,7 +107,7 @@ const Expenses: React.FC<ExpensesProps> = ({ expenses, onAdd, onDelete }) => {
                     <td className="py-3 px-4 text-gray-800 dark:text-gray-200">{expense.description}</td>
                     <td className="py-3 px-4 font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(expense.amount)}</td>
                     <td className="py-3 px-4">
-                      <button onClick={() => onDelete(expense.id)} className="text-red-600 hover:underline text-sm font-medium">{t('common.delete')}</button>
+                      <button onClick={() => handleDelete(expense.id)} className="text-red-600 hover:underline text-sm font-medium">{t('common.delete')}</button>
                     </td>
                   </tr>
                 ))}

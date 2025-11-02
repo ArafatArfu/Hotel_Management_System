@@ -34,6 +34,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
     return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
   }
 
+  const handleDelete = () => {
+    if (window.confirm(t('confirmations.deleteMenuItem'))) {
+      onDelete(item.id);
+    }
+  };
+
   return (
     <div className="bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col group">
       <div className="relative">
@@ -73,7 +79,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
           {isAdmin && (
             <div className="space-x-2">
                 <button onClick={() => onEdit(item)} className="text-xs text-blue-600 hover:underline">{t('common.edit')}</button>
-                <button onClick={() => onDelete(item.id)} className="text-xs text-red-600 hover:underline">{t('common.delete')}</button>
+                <button onClick={handleDelete} className="text-xs text-red-600 hover:underline">{t('common.delete')}</button>
             </div>
           )}
         </div>

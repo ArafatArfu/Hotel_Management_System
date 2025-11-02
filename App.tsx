@@ -6,6 +6,7 @@ import Employees from './components/Employees';
 import Expenses from './components/Expenses';
 import Reports from './components/Reports';
 import Settings from './components/Settings';
+import Analytics from './components/Analytics';
 import Login from './components/Login';
 import Footer from './components/Footer';
 import { initialOrders } from './data/orders';
@@ -17,7 +18,7 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
-type Page = 'dashboard' | 'menu' | 'order' | 'employees' | 'expenses' | 'reports' | 'settings';
+type Page = 'dashboard' | 'menu' | 'order' | 'employees' | 'expenses' | 'reports' | 'analytics' | 'settings';
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
@@ -47,25 +48,24 @@ const AppContent: React.FC = () => {
 
   const deleteOrder = useCallback((orderId: string) => {
     if (!isAdmin) return;
-    if (window.confirm(t('confirmations.deleteOrder'))) {
-        setOrders(prev => prev.filter(order => order.id !== orderId));
-    }
-  }, [isAdmin, t]);
+    setOrders(prev => prev.filter(order => order.id !== orderId));
+  }, [isAdmin]);
 
   // Menu Item CRUD
   const addMenuItem = useCallback((newItem: Omit<MenuItem, 'id'>) => {
+    if (!isAdmin) return;
     setMenuItems(prev => [...prev, { ...newItem, id: Date.now() }]);
-  }, []);
+  }, [isAdmin]);
 
   const updateMenuItem = useCallback((updatedItem: MenuItem) => {
+    if (!isAdmin) return;
     setMenuItems(prev => prev.map(item => item.id === updatedItem.id ? updatedItem : item));
-  }, []);
+  }, [isAdmin]);
 
   const deleteMenuItem = useCallback((itemId: number) => {
-    if (window.confirm(t('confirmations.deleteMenuItem'))) {
-      setMenuItems(prev => prev.filter(item => item.id !== itemId));
-    }
-  }, [t]);
+    if (!isAdmin) return;
+    setMenuItems(prev => prev.filter(item => item.id !== itemId));
+  }, [isAdmin]);
   
   const handleImageChange = useCallback((itemId: number, file: File) => {
     const reader = new FileReader();
@@ -84,31 +84,36 @@ const AppContent: React.FC = () => {
 
   // Employee CRUD
   const addEmployee = useCallback((newEmployee: Omit<EmployeeType, 'id'>) => {
+    if (!isAdmin) return;
     setEmployees(prev => [...prev, { ...newEmployee, id: Date.now() }]);
-  }, []);
+  }, [isAdmin]);
 
   const updateEmployee = useCallback((updatedEmployee: EmployeeType) => {
+    if (!isAdmin) return;
     setEmployees(prev => prev.map(emp => emp.id === updatedEmployee.id ? updatedEmployee : emp));
-  }, []);
+  }, [isAdmin]);
 
   const deleteEmployee = useCallback((employeeId: number) => {
+    if (!isAdmin) return;
     setEmployees(prev => prev.filter(emp => emp.id !== employeeId));
-  }, []);
+  }, [isAdmin]);
 
   // Expense CRUD
   const addExpense = useCallback((newExpense: Omit<ExpenseType, 'id'>) => {
+    if (!isAdmin) return;
     setExpenses(prev => [...prev, { ...newExpense, id: Date.now() }].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
-  }, []);
+  }, [isAdmin]);
   
   const deleteExpense = useCallback((expenseId: number) => {
+    if (!isAdmin) return;
     setExpenses(prev => prev.filter(exp => exp.id !== expenseId));
-  }, []);
+  }, [isAdmin]);
 
   if (!user) {
     return <Login />;
   }
   
-  const adminPages: Page[] = ['employees', 'expenses', 'reports', 'settings'];
+  const adminPages: Page[] = ['employees', 'expenses', 'reports', 'analytics', 'settings'];
 
   const renderPage = () => {
     if (!isAdmin && adminPages.includes(currentPage)) {
@@ -121,7 +126,7 @@ const AppContent: React.FC = () => {
     }
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard orders={orders} employees={employees} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
+        return <Dashboard orders={orders} employees={employees} expenses={expenses} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
       case 'menu':
         return <Menu menuItems={menuItems} onImageChange={handleImageChange} isAdmin={isAdmin} onAdd={addMenuItem} onUpdate={updateMenuItem} onDelete={deleteMenuItem} />;
       case 'order':
@@ -132,10 +137,12 @@ const AppContent: React.FC = () => {
         return <Expenses expenses={expenses} onAdd={addExpense} onDelete={deleteExpense} />;
       case 'reports':
         return <Reports orders={orders} employees={employees} expenses={expenses} />;
+      case 'analytics':
+        return <Analytics orders={orders} menuItems={menuItems} />;
       case 'settings':
         return <Settings />;
       default:
-        return <Dashboard orders={orders} employees={employees} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
+        return <Dashboard orders={orders} employees={employees} expenses={expenses} isAdmin={isAdmin} onDeleteOrder={deleteOrder} />;
     }
   };
 
@@ -168,6 +175,7 @@ const AppContent: React.FC = () => {
                 <NavButton page="employees" label={t('nav.employees')} />
                 <NavButton page="expenses" label={t('nav.expenses')} />
                 <NavButton page="reports" label={t('nav.reports')} />
+                <NavButton page="analytics" label={t('nav.analytics')} />
                 <NavButton page="settings" label={t('nav.settings')} />
               </>
             )}

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import type { Order, Employee } from '../types';
-import { EmployeeStatus } from '../types';
+import type { Order, Employee, Expense } from '../types';
+import { EmployeeStatus, SalaryType } from '../types';
 import ReceiptModal from './ReceiptModal';
 import { useAppContext } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -8,13 +8,14 @@ import { useLanguage } from '../context/LanguageContext';
 interface DashboardProps {
   orders: Order[];
   employees: Employee[];
+  expenses: Expense[];
   isAdmin: boolean;
   onDeleteOrder: (orderId: string) => void;
 }
 
-const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ title, value, icon }) => (
+const StatCard: React.FC<{ title: string; value: string; icon: string; color: string }> = ({ title, value, icon, color }) => (
   <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md flex items-center space-x-4">
-    <div className="bg-brand-primary text-white p-3 rounded-full">
+    <div className={`p-3 rounded-full text-white ${color}`}>
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
       </svg>
@@ -26,7 +27,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ ti
   </div>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDeleteOrder }) => {
+const Dashboard: React.FC<DashboardProps> = ({ orders, employees, expenses, isAdmin, onDeleteOrder }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { logo } = useAppContext();
   const { t, language } = useLanguage();
@@ -36,7 +37,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDel
     return orders.filter(order => order.date.startsWith(today));
   }, [orders]);
   
-  const monthlySales = useMemo(() => {
+  const monthlyRevenue = useMemo(() => {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
@@ -47,6 +48,33 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDel
       })
       .reduce((sum, order) => sum + order.grandTotal, 0);
   }, [orders]);
+
+  const monthlyExpenses = useMemo(() => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const otherExpenses = expenses
+      .filter(expense => {
+        const expenseDate = new Date(expense.date);
+        return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+      })
+      .reduce((sum, expense) => sum + expense.amount, 0);
+    
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const salaryExpenses = employees
+      .filter(e => e.status === EmployeeStatus.ACTIVE)
+      .reduce((sum, e) => {
+        if (e.salaryType === SalaryType.MONTHLY) {
+          return sum + e.salary;
+        }
+        return sum + (e.salary * daysInMonth);
+      }, 0);
+
+    return otherExpenses + salaryExpenses;
+  }, [expenses, employees]);
+
+  const monthlyNetProfit = useMemo(() => monthlyRevenue - monthlyExpenses, [monthlyRevenue, monthlyExpenses]);
   
   const yearlySales = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -60,6 +88,9 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDel
   const totalCustomersToday = useMemo(() => todaysOrders.length, [todaysOrders]); // Assuming 1 order = 1 customer for simplicity
   const totalActiveEmployees = useMemo(() => employees.filter(e => e.status === EmployeeStatus.ACTIVE).length, [employees]);
 
+  // All-time financial metrics
+  const totalRevenue = useMemo(() => orders.reduce((sum, order) => sum + order.grandTotal, 0), [orders]);
+
   const sortedOrders = useMemo(() => [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [orders]);
   
   const formatCurrency = (value: number) => {
@@ -70,16 +101,30 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDel
     return new Date(dateString).toLocaleString(language);
   }
 
+  const handleDelete = (orderId: string) => {
+    if (window.confirm(t('confirmations.deleteOrder'))) {
+        onDeleteOrder(orderId);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('dashboard.title')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard title={t('dashboard.todaysSales')} value={formatCurrency(totalSalesToday)} icon="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" />
-        <StatCard title={t('dashboard.monthlySales')} value={formatCurrency(monthlySales)} icon="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        <StatCard title={t('dashboard.yearlySales')} value={formatCurrency(yearlySales)} icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-8h1m-1 4h1m-1 4h1M9 21v-3.072a2 2 0 01.714-1.414l.857-.857A2 2 0 0112.14 15.5h-.285a2 2 0 01-1.414-.586l-.857-.857A2 2 0 019 12.072V9z" />
-        <StatCard title={t('dashboard.totalOrders')} value={String(totalOrdersToday)} icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        <StatCard title={t('dashboard.totalCustomers')} value={String(totalCustomersToday)} icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197" />
-        <StatCard title={t('dashboard.totalEmployees')} value={String(totalActiveEmployees)} icon="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8zM17 8a4 4 0 11-8 0 4 4 0 018 0z" />
+        {/* Today's Metrics */}
+        <StatCard title={t('dashboard.todaysSales')} value={formatCurrency(totalSalesToday)} icon="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" color="bg-green-500" />
+        <StatCard title={t('dashboard.totalOrders')} value={String(totalOrdersToday)} icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" color="bg-yellow-500" />
+        <StatCard title={t('dashboard.totalCustomers')} value={String(totalCustomersToday)} icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197" color="bg-purple-500" />
+
+        {/* This Month's Metrics */}
+        <StatCard title={t('dashboard.monthlyRevenue')} value={formatCurrency(monthlyRevenue)} icon="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" color="bg-blue-500" />
+        <StatCard title={t('dashboard.monthlyExpenses')} value={formatCurrency(monthlyExpenses)} icon="M9 14l6-6m-5.5.5h.01" color="bg-red-500" />
+        <StatCard title={t('dashboard.monthlyNetProfit')} value={formatCurrency(monthlyNetProfit)} icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" color={monthlyNetProfit >= 0 ? 'bg-emerald-500' : 'bg-rose-500'} />
+        
+        {/* Overall Metrics */}
+        <StatCard title={t('dashboard.yearlySales')} value={formatCurrency(yearlySales)} icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-8h1m-1 4h1m-1 4h1M9 21v-3.072a2 2 0 01.714-1.414l.857-.857A2 2 0 0112.14 15.5h-.285a2 2 0 01-1.414-.586l-.857-.857A2 2 0 019 12.072V9z" color="bg-indigo-500" />
+        <StatCard title={t('dashboard.allTimeRevenue')} value={formatCurrency(totalRevenue)} icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" color="bg-teal-500" />
+        <StatCard title={t('dashboard.totalEmployees')} value={String(totalActiveEmployees)} icon="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8zM17 8a4 4 0 11-8 0 4 4 0 018 0z" color="bg-pink-500" />
       </div>
 
       <div className="bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md">
@@ -111,7 +156,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, isAdmin, onDel
                     </button>
                     {isAdmin && (
                         <button
-                          onClick={() => onDeleteOrder(order.id)}
+                          onClick={() => handleDelete(order.id)}
                           className="text-red-600 hover:underline text-sm font-medium"
                         >
                           {t('dashboard.delete')}

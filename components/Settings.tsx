@@ -61,7 +61,7 @@ const LogoSettings: React.FC = () => {
       <div className="flex flex-col items-center space-y-4">
         <p className="text-sm text-gray-600 dark:text-gray-400">{t('settings.currentLogo')}</p>
         <div className="p-4 border border-dashed rounded-lg dark:border-gray-600">
-          <img src={logo} alt="Current restaurant logo" className="max-h-40 max-w-xs object-contain bg-white rounded" />
+          <img src={logo} alt="Current restaurant logo" className="max-h-40 max-w-xs object-contain rounded" />
         </div>
         <div>
           <label htmlFor="logo-upload" className="cursor-pointer bg-brand-primary text-white px-4 py-2 rounded-md shadow hover:bg-opacity-90 transition-colors">

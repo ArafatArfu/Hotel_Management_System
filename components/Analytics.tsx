@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import type { Order, MenuItem, Category, OrderItem } from '../types';
+import type { Order, MenuItem, Category } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 const AnalyticsCard: React.FC<{ title: string; children: React.ReactNode; className?: string }> = ({ title, children, className = '' }) => (
   <div className={`bg-brand-surface dark:bg-brand-surface-dark p-6 rounded-lg shadow-md ${className}`}>
@@ -12,6 +13,11 @@ type TimePeriod = '7d' | '30d' | 'year' | 'all';
 
 const Analytics: React.FC<{ orders: Order[]; menuItems: MenuItem[] }> = ({ orders }) => {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('30d');
+  const { t, language } = useLanguage();
+
+  const formatCurrency = useMemo(() => (value: number) => {
+    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
+  }, [language]);
 
   const filteredOrders = useMemo(() => {
     const now = new Date();
@@ -117,68 +123,68 @@ const Analytics: React.FC<{ orders: Order[]; menuItems: MenuItem[] }> = ({ order
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">Advanced Analytics</h2>
+        <h2 className="text-3xl font-bold text-brand-primary dark:text-gray-100 font-serif">{t('analytics.title')}</h2>
         <div className="flex items-center space-x-2">
-          <TimeFilterButton period="7d" label="Last 7 Days" />
-          <TimeFilterButton period="30d" label="Last 30 Days" />
-          <TimeFilterButton period="year" label="This Year" />
-          <TimeFilterButton period="all" label="All Time" />
+          <TimeFilterButton period="7d" label={t('analytics.timeFilter.d7')} />
+          <TimeFilterButton period="30d" label={t('analytics.timeFilter.d30')} />
+          <TimeFilterButton period="year" label={t('analytics.timeFilter.year')} />
+          <TimeFilterButton period="all" label={t('analytics.timeFilter.all')} />
         </div>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AnalyticsCard title={`Sales Trend (Total: ৳${totalRevenue.toFixed(2)})`} className="lg:col-span-2">
+        <AnalyticsCard title={t('analytics.salesTrend.title', { amount: formatCurrency(totalRevenue) })} className="lg:col-span-2">
           <div className="h-64 flex items-end space-x-2 overflow-x-auto p-2">
             {salesTrendData.length > 0 ? salesTrendData.map(({ label, value }) => (
               <div key={label} className="flex-1 min-w-[3rem] text-center group">
                 <div className="relative flex items-end justify-center h-full">
-                   <div className="absolute -top-6 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">৳{value.toFixed(0)}</div>
+                   <div className="absolute -top-6 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">{formatCurrency(value)}</div>
                    <div className="w-full bg-brand-secondary rounded-t-md hover:bg-brand-primary transition-colors" style={{ height: `${maxSaleValue > 0 ? (value / maxSaleValue) * 100 : 0}%` }}></div>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</p>
               </div>
-            )) : <p className="w-full text-center text-gray-500 dark:text-gray-400">No sales data for this period.</p>}
+            )) : <p className="w-full text-center text-gray-500 dark:text-gray-400">{t('analytics.salesTrend.noData')}</p>}
           </div>
         </AnalyticsCard>
 
-        <AnalyticsCard title="Best Selling Items">
+        <AnalyticsCard title={t('analytics.topSelling.title')}>
           <ul className="space-y-3">
             {topSellingItems.length > 0 ? topSellingItems.map((item, index) => (
               <li key={item.name} className="flex items-center justify-between text-sm">
                 <span className="font-semibold text-gray-800 dark:text-gray-200">{index + 1}. {item.name}</span>
-                <span className="text-gray-600 dark:text-gray-400 font-bold">{item.quantity} units</span>
+                <span className="text-gray-600 dark:text-gray-400 font-bold">{t('analytics.topSelling.units', { count: item.quantity })}</span>
               </li>
-            )) : <p className="text-center text-gray-500 dark:text-gray-400">No items sold in this period.</p>}
+            )) : <p className="text-center text-gray-500 dark:text-gray-400">{t('analytics.topSelling.noData')}</p>}
           </ul>
         </AnalyticsCard>
         
-        <AnalyticsCard title="Sales by Category">
+        <AnalyticsCard title={t('analytics.categorySales.title')}>
            <div className="space-y-2">
             {salesByCategory.length > 0 ? salesByCategory.map(({ name, value }) => (
                 <div key={name} className="w-full">
                     <div className="flex justify-between text-sm mb-1">
                         <span className="font-semibold text-gray-800 dark:text-gray-200">{name}</span>
-                        <span className="text-gray-600 dark:text-gray-400">৳{value.toFixed(2)} ({totalRevenue > 0 ? ((value / totalRevenue) * 100).toFixed(1) : 0}%)</span>
+                        <span className="text-gray-600 dark:text-gray-400">{formatCurrency(value)} ({totalRevenue > 0 ? ((value / totalRevenue) * 100).toFixed(1) : 0}%)</span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                         <div className="bg-brand-primary h-2.5 rounded-full" style={{ width: `${totalRevenue > 0 ? (value / totalRevenue) * 100 : 0}%` }}></div>
                     </div>
                 </div>
-            )) : <p className="text-center text-gray-500 dark:text-gray-400">No category data for this period.</p>}
+            )) : <p className="text-center text-gray-500 dark:text-gray-400">{t('analytics.categorySales.noData')}</p>}
            </div>
         </AnalyticsCard>
 
-        <AnalyticsCard title="Peak Business Hours" className="lg:col-span-2">
+        <AnalyticsCard title={t('analytics.peakHours.title')} className="lg:col-span-2">
             <div className="h-48 flex items-end space-x-2 overflow-x-auto p-2">
                 {peakHoursData.length > 0 ? peakHoursData.map(({ label, value }) => (
                 <div key={label} className="flex-1 min-w-[2.5rem] text-center group">
                     <div className="relative flex items-end justify-center h-full">
-                       <div className="absolute -top-6 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">{value}</div>
+                       <div className="absolute -top-6 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">{t('analytics.peakHours.orders', { count: value })}</div>
                        <div className="w-full bg-brand-secondary rounded-t-md hover:bg-brand-primary transition-colors" style={{ height: `${maxPeakHourValue > 0 ? (value / maxPeakHourValue) * 100 : 0}%` }}></div>
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</p>
                 </div>
-                )) : <p className="w-full text-center text-gray-500 dark:text-gray-400">No order data for this period.</p>}
+                )) : <p className="w-full text-center text-gray-500 dark:text-gray-400">{t('analytics.peakHours.noData')}</p>}
             </div>
         </AnalyticsCard>
 

@@ -6,14 +6,18 @@ export const translations = {
     employees: { en: 'Employees', ar: 'الموظفين', es: 'Empleados', fr: 'Employés', bn: 'কর্মচারী' },
     expenses: { en: 'Expenses', ar: 'المصروفات', es: 'Gastos', fr: 'Dépenses', bn: 'খরচ' },
     reports: { en: 'Reports', ar: 'التقارير', es: 'Informes', fr: 'Rapports', bn: 'রিপোর্ট' },
+    analytics: { en: 'Analytics', ar: 'التحليلات', es: 'Análisis', fr: 'Analytique', bn: 'বিশ্লেষণ' },
     settings: { en: 'Settings', ar: 'الإعدادات', es: 'Ajustes', fr: 'Paramètres', bn: 'সেটিংস' },
     logout: { en: 'Logout', ar: 'تسجيل الخروج', es: 'Cerrar Sesión', fr: 'Déconnexion', bn: 'লগ আউট' },
   },
   dashboard: {
     title: { en: "Today's Dashboard", ar: 'لوحة تحكم اليوم', es: 'Tablero de Hoy', fr: "Tableau de bord d'aujourd'hui", bn: 'আজকের ড্যাশবোর্ড' },
     todaysSales: { en: "Today's Sales", ar: 'مبيعات اليوم', es: 'Ventas de Hoy', fr: "Ventes d'aujourd'hui", bn: 'আজকের বিক্রয়' },
-    monthlySales: { en: 'Monthly Sales', ar: 'المبيعات الشهرية', es: 'Ventas Mensuales', fr: 'Ventes Mensuelles', bn: 'মাসিক বিক্রয়' },
-    yearlySales: { en: 'Yearly Sales', ar: 'المبيعات السنوية', es: 'Ventas Anuales', fr: 'Ventes Annuelles', bn: 'বার্ষিক বিক্রয়' },
+    monthlyRevenue: { en: 'Monthly Revenue', ar: 'الإيرادات الشهرية', es: 'Ingresos Mensuales', fr: 'Revenu Mensuel', bn: 'মাসিক রাজস্ব' },
+    monthlyExpenses: { en: 'Monthly Expenses', ar: 'المصروفات الشهرية', es: 'Gastos Mensuales', fr: 'Dépenses Mensuelles', bn: 'মাসিক খরচ' },
+    monthlyNetProfit: { en: 'Monthly Net Profit', ar: 'صافي الربح الشهري', es: 'Ganancia Neta Mensual', fr: 'Bénéfice Net Mensuel', bn: 'মাসিক নিট লাভ' },
+    yearlySales: { en: "This Year's Sales", ar: 'مبيعات هذا العام', es: 'Ventas de este Año', fr: 'Ventes de cette année', bn: 'এই বছরের বিক্রয়' },
+    allTimeRevenue: { en: 'All-Time Revenue', ar: 'إجمالي الإيرادات التاريخي', es: 'Ingresos Históricos', fr: 'Revenu de tous les temps', bn: 'সর্বকালের রাজস্ব' },
     totalOrders: { en: 'Total Orders', ar: 'إجمالي الطلبات', es: 'Pedidos Totales', fr: 'Commandes Totales', bn: 'মোট অর্ডার' },
     totalCustomers: { en: 'Total Customers', ar: 'إجمالي العملاء', es: 'Clientes Totales', fr: 'Clients Totaux', bn: 'মোট গ্রাহক' },
     totalEmployees: { en: 'Total Employees', ar: 'إجمالي الموظفين', es: 'Total de Empleados', fr: 'Total des Employés', bn: 'মোট কর্মচারী' },
@@ -163,6 +167,7 @@ export const translations = {
     deleteOrder: { en: 'Are you sure you want to delete this order record? This action is permanent.', ar: 'هل أنت متأكد أنك تريد حذف سجل هذا الطلب؟ هذا الإجراء دائم.', es: '¿Está seguro de que desea eliminar este registro de pedido? Esta acción es permanente.', fr: 'Êtes-vous sûr de vouloir supprimer cet enregistrement de commande ? Cette action est permanente.', bn: 'আপনি কি নিশ্চিত যে আপনি এই অর্ডার রেকর্ডটি মুছে ফেলতে চান? এই পদক্ষেপটি স্থায়ী।' },
     deleteMenuItem: { en: 'Are you sure you want to delete this menu item?', ar: 'هل أنت متأكد أنك تريد حذف هذا العنصر من القائمة؟', es: '¿Está seguro de que desea eliminar este artículo del menú?', fr: 'Êtes-vous sûr de vouloir supprimer cet article du menu ?', bn: 'আপনি কি নিশ্চিত যে আপনি এই মেনু আইটেমটি মুছে ফেলতে চান?' },
     deleteEmployee: { en: 'Are you sure you want to delete this employee?', ar: 'هل أنت متأكد أنك تريد حذف هذا الموظف؟', es: '¿Está seguro de que desea eliminar a este empleado?', fr: 'Êtes-vous sûr de vouloir supprimer cet employé ?', bn: 'আপনি কি নিশ্চিত যে আপনি এই কর্মচারী মুছে ফেলতে চান?' },
+    deleteExpense: { en: 'Are you sure you want to delete this expense record?', ar: 'هل أنت متأكد أنك تريد حذف سجل هذا المصروف؟', es: '¿Está seguro de que desea eliminar este registro de gastos?', fr: 'Êtes-vous sûr de vouloir supprimer cet enregistrement de dépense ?', bn: 'আপনি কি নিশ্চিত যে আপনি এই খরচের রেকর্ডটি মুছে ফেলতে চান?' },
   },
   accessDenied: {
     title: { en: 'Access Denied', ar: 'الوصول مرفوض', es: 'Acceso Denegado', fr: 'Accès Refusé', bn: 'অ্যাক্সেস অস্বীকার করা হয়েছে' },
@@ -176,5 +181,32 @@ export const translations = {
         fr: '© 2025 Arafatul Islam. Tous droits réservés.', 
         bn: '© ২০২৫ আরাফাতুল ইসলাম। সর্বস্বত্ব সংরক্ষিত।' 
     },
+  },
+  analytics: {
+    title: { en: 'Advanced Analytics', ar: 'تحليلات متقدمة', es: 'Análisis Avanzado', fr: 'Analyses Avancées', bn: 'উন্নত বিশ্লেষণ' },
+    timeFilter: {
+      d7: { en: 'Last 7 Days', ar: 'آخر 7 أيام', es: 'Últimos 7 Días', fr: '7 derniers jours', bn: 'গত ৭ দিন' },
+      d30: { en: 'Last 30 Days', ar: 'آخر 30 يومًا', es: 'Últimos 30 Días', fr: '30 derniers jours', bn: 'গত ৩০ দিন' },
+      year: { en: 'This Year', ar: 'هذا العام', es: 'Este Año', fr: 'Cette Année', bn: 'এই বছর' },
+      all: { en: 'All Time', ar: 'كل الأوقات', es: 'Todo el Tiempo', fr: 'Tout le temps', bn: 'সর্বদা' },
+    },
+    salesTrend: {
+      title: { en: 'Sales Trend (Total: {amount})', ar: 'اتجاه المبيعات (الإجمالي: {amount})', es: 'Tendencia de Ventas (Total: {amount})', fr: 'Tendance des ventes (Total : {amount})', bn: 'বিক্রয় প্রবণতা (মোট: {amount})' },
+      noData: { en: 'No sales data for this period.', ar: 'لا توجد بيانات مبيعات لهذه الفترة.', es: 'No hay datos de ventas para este período.', fr: 'Aucune donnée de vente pour cette période.', bn: 'এই সময়ের জন্য কোন বিক্রয় ডেটা নেই।' },
+    },
+    topSelling: {
+      title: { en: 'Best Selling Items', ar: 'الأكثر مبيعًا', es: 'Artículos Más Vendidos', fr: 'Articles les plus vendus', bn: 'সবচেয়ে বেশি বিক্রিত আইটেম' },
+      units: { en: '{count} units', ar: '{count} وحدة', es: '{count} unidades', fr: '{count} unités', bn: '{count} ইউনিট' },
+      noData: { en: 'No items sold in this period.', ar: 'لم يتم بيع أي عناصر في هذه الفترة.', es: 'No se vendieron artículos en este período.', fr: 'Aucun article vendu pendant cette période.', bn: 'এই সময়ের মধ্যে কোন আইটেম বিক্রি হয়নি।' },
+    },
+    categorySales: {
+      title: { en: 'Sales by Category', ar: 'المبيعات حسب الفئة', es: 'Ventas por Categoría', fr: 'Ventes par catégorie', bn: 'বিভাগ অনুযায়ী বিক্রয়' },
+      noData: { en: 'No category data for this period.', ar: 'لا توجد بيانات فئة لهذه الفترة.', es: 'No hay datos de categoría para este período.', fr: "Aucune donnée de catégorie pour cette période.", bn: 'এই সময়ের জন্য কোন বিভাগের ডেটা নেই।' },
+    },
+    peakHours: {
+      title: { en: 'Peak Business Hours', ar: 'ساعات الذروة', es: 'Horas Pico de Negocio', fr: "Heures de pointe de l'activité", bn: 'সর্বোচ্চ ব্যবসার সময়' },
+      orders: { en: '{count} orders', ar: '{count} طلبات', es: '{count} pedidos', fr: '{count} commandes', bn: '{count} অর্ডার' },
+      noData: { en: 'No order data for this period.', ar: 'لا توجد بيانات طلب لهذه الفترة.', es: 'No hay datos de pedidos para este período.', fr: 'Aucune donnée de commande pour cette période.', bn: 'এই সময়ের জন্য কোন অর্ডার ডেটা নেই।' },
+    }
   }
 };
