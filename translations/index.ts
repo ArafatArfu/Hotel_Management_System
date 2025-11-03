@@ -65,6 +65,7 @@ export const translations = {
     saveAsPdf: { en: 'Download', ar: 'تحميل', es: 'Descargar', fr: 'Télécharger', bn: 'ডাউনলোড' },
     confirm: { en: 'Confirm Order', ar: 'تأكيد الطلب', es: 'Confirmar Pedido', fr: 'Confirmer la Commande', bn: 'অর্ডার নিশ্চিত করুন' },
     thankYou: { en: 'Thank you for dining with us!', ar: 'شكرا لتناول الطعام معنا!', es: '¡Gracias por cenar con nosotros!', fr: 'Merci de dîner avec nous !', bn: 'আমাদের সাথে ডাইনিং করার জন্য আপনাকে ধন্যবাদ!' },
+    itemDetails: { en: 'Details', ar: 'التفاصيل', es: 'Detalles', fr: 'Détails', bn: 'বিবরণ' },
   },
   employees: {
     title: { en: 'Employee Management', ar: 'إدارة الموظفين', es: 'Gestión de Empleados', fr: 'Gestion des Employés', bn: 'কর্মচারী ব্যবস্থাপনা' },
