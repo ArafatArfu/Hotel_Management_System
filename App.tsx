@@ -6,7 +6,6 @@ import Employees from './components/Employees';
 import Expenses from './components/Expenses';
 import Reports from './components/Reports';
 import Settings from './components/Settings';
-import Analytics from './components/Analytics';
 import Login from './components/Login';
 import Footer from './components/Footer';
 import { initialOrders } from './data/orders';
@@ -18,7 +17,7 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
-type Page = 'dashboard' | 'menu' | 'order' | 'employees' | 'expenses' | 'reports' | 'analytics' | 'settings';
+type Page = 'dashboard' | 'menu' | 'order' | 'employees' | 'expenses' | 'reports' | 'settings';
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
@@ -113,7 +112,7 @@ const AppContent: React.FC = () => {
     return <Login />;
   }
   
-  const adminPages: Page[] = ['employees', 'expenses', 'reports', 'analytics', 'settings'];
+  const adminPages: Page[] = ['employees', 'expenses', 'reports', 'settings'];
 
   const renderPage = () => {
     if (!isAdmin && adminPages.includes(currentPage)) {
@@ -137,8 +136,6 @@ const AppContent: React.FC = () => {
         return <Expenses expenses={expenses} onAdd={addExpense} onDelete={deleteExpense} />;
       case 'reports':
         return <Reports orders={orders} employees={employees} expenses={expenses} />;
-      case 'analytics':
-        return <Analytics orders={orders} menuItems={menuItems} />;
       case 'settings':
         return <Settings />;
       default:
@@ -175,7 +172,6 @@ const AppContent: React.FC = () => {
                 <NavButton page="employees" label={t('nav.employees')} />
                 <NavButton page="expenses" label={t('nav.expenses')} />
                 <NavButton page="reports" label={t('nav.reports')} />
-                <NavButton page="analytics" label={t('nav.analytics')} />
                 <NavButton page="settings" label={t('nav.settings')} />
               </>
             )}

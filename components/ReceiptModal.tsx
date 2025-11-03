@@ -50,7 +50,7 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 print:bg-white print:items-start">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm relative print:shadow-none print:p-0 text-black">
+      <div className="bg-white p-4 rounded-lg shadow-xl w-full max-w-xs relative print:shadow-none print:p-0 text-black">
         {/* Modal content for screen */}
         <div className="print:hidden">
           <h2 className="text-2xl font-bold text-center mb-4">{t('receiptModal.title')}</h2>
@@ -58,19 +58,19 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
         </div>
         
         {/* Receipt Content for both screen and print */}
-        <div id="receipt-content" className="font-mono text-xs text-black bg-white p-2 border border-gray-200">
+        <div id="receipt-content" className="font-mono text-xs text-black bg-white p-3 border border-gray-400">
           <div className="text-center mb-2">
-            <img src={logo} alt="Restaurant Logo" className="w-24 h-auto mx-auto mb-1" />
-            <p className="leading-tight">1216-West Shewrapara, Mirpur 10</p>
-            <p className="leading-tight">Contact: +8801871520684</p>
+            <img src={logo} alt="Restaurant Logo" className="w-20 h-auto mx-auto mb-1" />
+            <p className="leading-snug">1216-West Shewrapara, Mirpur 10</p>
+            <p className="leading-snug">Contact: +8801871520684</p>
           </div>
           <div className="border-t border-b border-dashed border-black py-1 mb-1">
-            <p className="leading-tight">{t('expenses.date')}: {formatDate(order.date)}</p>
-            <p className="leading-tight">{t('dashboard.dateTime').split(' ')[1]}: {formatTime(order.date)}</p>
-            <p className="leading-tight">{t('dashboard.receiptNo')}: {order.id}</p>
+            <p className="leading-snug">{t('expenses.date')}: {formatDate(order.date)}</p>
+            <p className="leading-snug">{t('dashboard.dateTime').split(' ')[1]}: {formatTime(order.date)}</p>
+            <p className="leading-snug">{t('dashboard.receiptNo')}: {order.id}</p>
           </div>
           <div>
-            <div className="flex font-bold border-b border-dashed border-black pb-1 mb-1">
+            <div className="flex font-bold border-b border-dashed border-black pb-0.5 mb-0.5">
               <span className="flex-1">{t('dashboard.items')}</span>
               <span className="w-20 text-right">{t('receiptModal.itemDetails')}</span>
               <span className="w-16 text-right">{t('dashboard.totalAmount')}</span>
@@ -78,24 +78,24 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
             <div>
               {order.items.map(item => (
                 <div key={item.id} className="flex py-0.5">
-                  <span className="flex-1 pr-1 leading-tight">{item.name}</span>
+                  <span className="flex-1 pr-1 leading-snug">{item.name}</span>
                   <span className="w-20 text-right text-xs">{item.quantity} x {item.price.toFixed(2)}</span>
                   <span className="w-16 text-right">{(item.quantity * item.price).toFixed(2)}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="border-t border-dashed border-black mt-1 pt-1 space-y-0.5">
+          <div className="border-t border-dashed border-black mt-2 pt-2 space-y-0">
             <div className="flex justify-between"><span>{t('order.subtotal')}:</span><span>{order.subtotal.toFixed(2)}</span></div>
             {order.discount > 0 && <div className="flex justify-between"><span>{t('order.discount')}:</span><span>-{order.discount.toFixed(2)}</span></div>}
             <div className="flex justify-between"><span>{t('order.tax', { rate: '' }).replace('()', '')}:</span><span>{order.tax.toFixed(2)}</span></div>
             {order.serviceCharge > 0 && <div className="flex justify-between"><span>{t('order.serviceCharge', { rate: '' }).replace('()', '')}:</span><span>{order.serviceCharge.toFixed(2)}</span></div>}
-            <div className="flex justify-between font-bold text-base border-t border-black mt-1 pt-1">
+            <div className="flex justify-between font-bold text-sm border-t border-black mt-2 pt-1">
                 <span>{t('order.grandTotal')}:</span>
                 <span>{formatCurrency(order.grandTotal)}</span>
             </div>
           </div>
-          <div className="text-center mt-2 pt-1 border-t border-dashed border-black">
+          <div className="text-center mt-3 pt-2 border-t border-dashed border-black">
             <p>{t('receiptModal.thankYou')}</p>
           </div>
         </div>

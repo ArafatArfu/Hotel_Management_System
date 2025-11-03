@@ -6,7 +6,6 @@ export const translations = {
     employees: { en: 'Employees', ar: 'الموظفين', es: 'Empleados', fr: 'Employés', bn: 'কর্মচারী' },
     expenses: { en: 'Expenses', ar: 'المصروفات', es: 'Gastos', fr: 'Dépenses', bn: 'খরচ' },
     reports: { en: 'Reports', ar: 'التقارير', es: 'Informes', fr: 'Rapports', bn: 'রিপোর্ট' },
-    analytics: { en: 'Analytics', ar: 'التحليلات', es: 'Análisis', fr: 'Analytique', bn: 'বিশ্লেষণ' },
     settings: { en: 'Settings', ar: 'الإعدادات', es: 'Ajustes', fr: 'Paramètres', bn: 'সেটিংস' },
     logout: { en: 'Logout', ar: 'تسجيل الخروج', es: 'Cerrar Sesión', fr: 'Déconnexion', bn: 'লগ আউট' },
   },
@@ -195,32 +194,5 @@ export const translations = {
         fr: '© 2025 Arafatul Islam. Tous droits réservés.', 
         bn: '© ২০২৫ আরাফাতুল ইসলাম। সর্বস্বত্ব সংরক্ষিত।' 
     },
-  },
-  analytics: {
-    title: { en: 'Advanced Analytics', ar: 'تحليلات متقدمة', es: 'Análisis Avanzado', fr: 'Analyses Avancées', bn: 'উন্নত বিশ্লেষণ' },
-    timeFilter: {
-      d7: { en: 'Last 7 Days', ar: 'آخر 7 أيام', es: 'Últimos 7 Días', fr: '7 derniers jours', bn: 'গত ৭ দিন' },
-      d30: { en: 'Last 30 Days', ar: 'آخر 30 يومًا', es: 'Últimos 30 Días', fr: '30 derniers jours', bn: 'গত ৩০ দিন' },
-      year: { en: 'This Year', ar: 'هذا العام', es: 'Este Año', fr: 'Cette Année', bn: 'এই বছর' },
-      all: { en: 'All Time', ar: 'كل الأوقات', es: 'Todo el Tiempo', fr: 'Tout le temps', bn: 'সর্বদা' },
-    },
-    salesTrend: {
-      title: { en: 'Sales Trend (Total: {amount})', ar: 'اتجاه المبيعات (الإجمالي: {amount})', es: 'Tendencia de Ventas (Total: {amount})', fr: 'Tendance des ventes (Total : {amount})', bn: 'বিক্রয় প্রবণতা (মোট: {amount})' },
-      noData: { en: 'No sales data for this period.', ar: 'لا توجد بيانات مبيعات لهذه الفترة.', es: 'No hay datos de ventas para este período.', fr: 'Aucune donnée de vente pour cette période.', bn: 'এই সময়ের জন্য কোন বিক্রয় ডেটা নেই।' },
-    },
-    topSelling: {
-      title: { en: 'Best Selling Items', ar: 'الأكثر مبيعًا', es: 'Artículos Más Vendidos', fr: 'Articles les plus vendus', bn: 'সবচেয়ে বেশি বিক্রিত আইটেম' },
-      units: { en: '{count} units', ar: '{count} وحدة', es: '{count} unidades', fr: '{count} unités', bn: '{count} ইউনিট' },
-      noData: { en: 'No items sold in this period.', ar: 'لم يتم بيع أي عناصر في هذه الفترة.', es: 'No se vendieron artículos en este período.', fr: 'Aucun article vendu pendant cette période.', bn: 'এই সময়ের মধ্যে কোন আইটেম বিক্রি হয়নি।' },
-    },
-    categorySales: {
-      title: { en: 'Sales by Category', ar: 'المبيعات حسب الفئة', es: 'Ventas por Categoría', fr: 'Ventes par catégorie', bn: 'বিভাগ অনুযায়ী বিক্রয়' },
-      noData: { en: 'No category data for this period.', ar: 'لا توجد بيانات فئة لهذه الفترة.', es: 'No hay datos de categoría para este período.', fr: "Aucune donnée de catégorie pour cette période.", bn: 'এই সময়ের জন্য কোন বিভাগের ডেটা নেই।' },
-    },
-    peakHours: {
-      title: { en: 'Peak Business Hours', ar: 'ساعات الذروة', es: 'Horas Pico de Negocio', fr: "Heures de pointe de l'activité", bn: 'সর্বোচ্চ ব্যবসার সময়' },
-      orders: { en: '{count} orders', ar: '{count} طلبات', es: '{count} pedidos', fr: '{count} commandes', bn: '{count} অর্ডার' },
-      noData: { en: 'No order data for this period.', ar: 'لا توجد بيانات طلب لهذه الفترة.', es: 'No hay datos de pedidos para este período.', fr: 'Aucune donnée de commande pour cette période.', bn: 'এই সময়ের জন্য কোন অর্ডার ডেটা নেই।' },
-    }
   }
 };

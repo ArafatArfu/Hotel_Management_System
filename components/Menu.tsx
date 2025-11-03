@@ -37,7 +37,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
   };
 
   return (
-    <div className="bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col group">
+    <div className="bg-brand-surface dark:bg-brand-surface-dark rounded-lg shadow-md overflow-hidden flex flex-col group border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
       <div className="relative">
         <img
           src={item.imageUrl || getPlaceholderUrl()}
