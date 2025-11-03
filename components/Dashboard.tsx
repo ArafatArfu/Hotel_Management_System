@@ -30,7 +30,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: string; color: st
 const Dashboard: React.FC<DashboardProps> = ({ orders, employees, expenses, isAdmin, onDeleteOrder }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { logo } = useAppContext();
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
 
   const todaysOrders = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -93,10 +93,6 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, employees, expenses, isAd
 
   const sortedOrders = useMemo(() => [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [orders]);
   
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
-
   const formatDateTime = (dateString: string) => {
     return new Date(dateString).toLocaleString(language);
   }

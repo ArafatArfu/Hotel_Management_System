@@ -103,15 +103,11 @@ interface EmployeesProps {
 }
 
 const Employees: React.FC<EmployeesProps> = ({ employees, onAdd, onUpdate, onDelete }) => {
-  const { t, language } = useLanguage();
+  const { t, formatCurrency } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
-
   const filteredEmployees = useMemo(() => {
     const lowercasedFilter = searchTerm.toLowerCase();
     if (!lowercasedFilter) return employees;

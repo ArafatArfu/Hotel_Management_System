@@ -24,7 +24,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: string }> = ({ ti
 );
 
 const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
@@ -32,10 +32,6 @@ const Reports: React.FC<ReportsProps> = ({ orders, employees, expenses }) => {
 
   const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
   
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
-
   const monthlyData = useMemo(() => {
     const [year, month] = selectedMonth.split('-').map(Number);
     const daysInMonth = getDaysInMonth(year, month);

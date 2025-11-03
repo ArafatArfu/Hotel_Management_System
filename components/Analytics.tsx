@@ -13,11 +13,7 @@ type TimePeriod = '7d' | '30d' | 'year' | 'all';
 
 const Analytics: React.FC<{ orders: Order[]; menuItems: MenuItem[] }> = ({ orders }) => {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('30d');
-  const { t, language } = useLanguage();
-
-  const formatCurrency = useMemo(() => (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }, [language]);
+  const { t, formatCurrency } = useLanguage();
 
   const filteredOrders = useMemo(() => {
     const now = new Date();

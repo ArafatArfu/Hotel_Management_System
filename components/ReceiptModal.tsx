@@ -13,7 +13,7 @@ interface ReceiptModalProps {
 }
 
 const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onConfirm }) => {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
 
   const handlePrint = () => {
     window.print();
@@ -45,10 +45,6 @@ const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, logo, onClose, onCon
     }
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
-  
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString(language);
   const formatTime = (dateString: string) => new Date(dateString).toLocaleTimeString(language);
 

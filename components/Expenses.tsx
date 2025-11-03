@@ -10,7 +10,7 @@ interface ExpensesProps {
 }
 
 const Expenses: React.FC<ExpensesProps> = ({ expenses, onAdd, onDelete }) => {
-  const { t, language } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     category: ExpenseCategory.SUPPLIES,
@@ -22,10 +22,6 @@ const Expenses: React.FC<ExpensesProps> = ({ expenses, onAdd, onDelete }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-  
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

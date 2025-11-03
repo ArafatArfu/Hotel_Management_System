@@ -20,12 +20,8 @@ const Order: React.FC<OrderProps> = ({ addOrder, menuItems }) => {
   const [finalizedOrder, setFinalizedOrder] = useState<OrderType | null>(null);
   
   const { taxRate, serviceChargeRate, logo } = useAppContext();
-  const { t, language } = useLanguage();
+  const { t, formatCurrency } = useLanguage();
 
-  const formatCurrency = useCallback((value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }, [language]);
-  
   const categories = ['All', ...Object.values(Category)];
 
   const availableMenuItems = useMemo(() => {

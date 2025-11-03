@@ -13,7 +13,7 @@ interface MenuItemCardProps {
 }
 
 const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChange, onEdit, onDelete }) => {
-  const { t, language } = useLanguage();
+  const { t, formatCurrency } = useLanguage();
   const getPlaceholderUrl = () => {
     return `https://via.placeholder.com/400x240.png/5D4037/FFFFFF?text=${encodeURIComponent(item.name)}`;
   };
@@ -29,10 +29,6 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, isAdmin, onImageChang
       onImageChange(item.id, e.target.files[0]);
     }
   };
-  
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(language, { style: 'currency', currency: 'BDT' }).format(value).replace('BDT', '৳');
-  }
 
   const handleDelete = () => {
     if (window.confirm(t('confirmations.deleteMenuItem'))) {

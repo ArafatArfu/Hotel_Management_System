@@ -120,10 +120,20 @@ export const translations = {
     taxDescription: { en: 'This rate is applied to the subtotal of all new orders.', ar: 'يتم تطبيق هذا المعدل على المجموع الفرعي لجميع الطلبات الجديدة.', es: 'Esta tasa se aplica al subtotal de todos los nuevos pedidos.', fr: "Ce taux est appliqué au sous-total de toutes les nouvelles commandes.", bn: 'এই হারটি সমস্ত নতুন অর্ডারের উপমোটের উপর প্রয়োগ করা হয়।' },
     scRate: { en: 'Service Charge Rate (%)', ar: 'معدل رسوم الخدمة (٪)', es: 'Tasa de Cargo por Servicio (%)', fr: 'Taux des frais de service (%)', bn: 'পরিষেবা চার্জ হার (%)' },
     scDescription: { en: 'This rate is applied to the subtotal when enabled on a new order.', ar: 'يتم تطبيق هذا المعدل على المجموع الفرعي عند تمكينه في طلب جديد.', es: 'Esta tasa se aplica al subtotal cuando se habilita en un nuevo pedido.', fr: "Ce taux est appliqué au sous-total lorsqu'il est activé sur une nouvelle commande.", bn: 'একটি নতুন অর্ডারে সক্রিয় করা হলে এই হারটি উপমোটের উপর প্রয়োগ করা হয়।' },
+    currency: {
+        title: { en: 'Currency', ar: 'عملة', es: 'Moneda', fr: 'Devise', bn: 'মুদ্রা' },
+        description: { en: 'Select the currency for displaying prices throughout the application.', ar: 'حدد العملة لعرض الأسعار في جميع أنحاء التطبيق.', es: 'Seleccione la moneda para mostrar los precios en toda la aplicación.', fr: "Sélectionnez la devise pour afficher les prix dans toute l'application.", bn: 'অ্যাপ্লিকেশন জুড়ে দাম প্রদর্শনের জন্য মুদ্রা নির্বাচন করুন।' },
+    },
     language: {
         title: { en: 'Language', ar: 'لغة', es: 'Idioma', fr: 'Langue', bn: 'ভাষা' },
         description: { en: 'Choose the language for the application interface.', ar: 'اختر لغة واجهة التطبيق.', es: 'Elija el idioma para la interfaz de la aplicación.', fr: "Choisissez la langue de l'interface de l'application.", bn: 'অ্যাপ্লিকেশন ইন্টারফেসের জন্য ভাষা চয়ন করুন।' }
-    }
+    },
+    saveChanges: { en: 'Save Changes', ar: 'حفظ التغييرات', es: 'Guardar Cambios', fr: 'Enregistrer les modifications', bn: 'পরিবর্তনগুলি সংরক্ষণ করুন' },
+    discardChanges: { en: 'Discard', ar: 'تجاهل', es: 'Descartar', fr: 'Annuler', bn: 'বাতিল করুন' },
+    unsavedChanges: {
+      title: { en: 'Confirm Changes', ar: 'تأكيد التغييرات', es: 'Confirmar Cambios', fr: 'Confirmer les modifications', bn: 'পরিবর্তন নিশ্চিত করুন' },
+      message: { en: 'Are you sure you want to save these changes?', ar: 'هل أنت متأكد أنك تريد حفظ هذه التغييرات؟', es: '¿Estás seguro de que quieres guardar estos cambios?', fr: 'Êtes-vous sûr de vouloir enregistrer ces modifications ?', bn: 'আপনি কি নিশ্চিত যে আপনি এই পরিবর্তনগুলি সংরক্ষণ করতে চান?' }
+    },
   },
   login: {
     title: { en: 'Admin & Staff Login', ar: 'تسجيل دخول المسؤول والموظفين', es: 'Inicio de Sesión de Admin y Personal', fr: 'Connexion Admin et Personnel', bn: 'অ্যাডমিন এবং স্টাফ লগইন' },
@@ -140,6 +150,7 @@ export const translations = {
     delete: { en: 'Delete', ar: 'حذف', es: 'Eliminar', fr: 'Supprimer', bn: 'মুছে ফেলুন' },
     cancel: { en: 'Cancel', ar: 'إلغاء', es: 'Cancelar', fr: 'Annuler', bn: 'বাতিল করুন' },
     save: { en: 'Save', ar: 'حفظ', es: 'Guardar', fr: 'Enregistrer', bn: 'সংরক্ষণ করুন' },
+    confirm: { en: 'Confirm', ar: 'تأكيد', es: 'Confirmar', fr: 'Confirmer', bn: 'নিশ্চিত করুন' },
     name: { en: 'Name', ar: 'الاسم', es: 'Nombre', fr: 'Nom', bn: 'নাম' },
     status: { en: 'Status', ar: 'الحالة', es: 'Estado', fr: 'Statut', bn: 'স্ট্যাটাস' },
     actions: { en: 'Actions', ar: 'الإجراءات', es: 'Acciones', fr: 'Actions', bn: 'কার্যকলাপ' },
